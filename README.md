@@ -37,15 +37,15 @@
 
 ## Bootloader folders and files
 
-| Folder/File              | Description                                                           |
+| フォルダー / ファイル             | 説明                                                           |
 | ------------------------ | --------------------------------------------------------------------- |
-| bootloader               | Main folder.                                                          |
-|  \|__ bootlogo.bmp       | It is used if no `logopath` key is found. User provided. Can be skipped. |
-|  \|__ hekate_ipl.ini     | Main bootloader configuration and boot entries in `Launch` menu.      |
-|  \|__ nyx.ini            | Nyx GUI configuration                                                 |
-|  \|__ patches.ini        | Add external patches. Can be skipped. A template can be found [here](./res/patches_template.ini) |
-|  \|__ update.bin         | If newer, it is loaded at boot. Normally for modchips. Auto updated and created at first boot. |
-| bootloader/ini/          | For individual inis. `More configs` menu. Autoboot is supported.   |
+| bootloader               | メインのフォルダー                                                          |
+|  \|__ bootlogo.bmp       | `logopath`が指定されていない場合に使用されます。スキップ可能。 |
+|  \|__ hekate_ipl.ini     | `Launch`メニュー内の主なブートローダー設定と起動エントリ。      |
+|  \|__ nyx.ini            | Nyx GUIの設定。                                                 |
+|  \|__ patches.ini        | 外部パッチを追加します。スキップ可能。[ここ](./res/patches_template.ini)にテンプレートがあります。  |
+|  \|__ update.bin         | 新しい場合は起動時にロードされます。通常はモッドチップ用です。初回起動時に自動更新および作成されます。|
+| bootloader/ini/          | 個々のiniファイル。`More config`メニュー。自動起動がサポートされています。  |
 | bootloader/res/          | Nyx user resources. Icons and more.                                   |
 |  \|__ background.bmp     | Nyx - Custom background. User provided.                               |
 |  \|__ icon_switch.bmp    | Nyx - Default icon for CFWs.                                          |
