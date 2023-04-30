@@ -1,6 +1,6 @@
 # hekate - Nyx　日本語バージョン
 
-![Image of Hekate](https://user-images.githubusercontent.com/3665130/60391760-bc1e8c00-9afe-11e9-8b7a-b065873081b2.png)
+![Hekateの写真](https://user-images.githubusercontent.com/3665130/60391760-bc1e8c00-9afe-11e9-8b7a-b065873081b2.png)
 
 
 カスタムグラフィカルNintendo Switchブートローダー、ファームウェア パッチャー、ツールなど。
@@ -12,7 +12,7 @@
 - [ブートローダーの設定](#bootloader-configuration)
   * [hekateグローバル設定](#hekate-global-configuration-keysvalues-when-entry-is-config)
   * [起動エントリ](#boot-entry-keyvalue-combinations)
-  * Exosphèreの起動エントリ](#boot-entry-keyvalue-combinations-for-exosphère)
+  * [Exosphèreの起動エントリ](#boot-entry-keyvalue-combinations-for-exosphère)
   * [ペイロード](#payload-storage)
   * [Nyx設定](#nyx-configuration-keysvalues-nyxini)
 
@@ -20,19 +20,19 @@
 
 ## 特徴
 
-- **Fully Configurable and Graphical** with Touchscreen and Joycon input support
-- **Launcher Style, Background and Color Themes**
-- **HOS (Switch OS) Bootloader** -- For CFW Sys/Emu, OFW Sys and Stock Sys
-- **Android & Linux Bootloader**
-- **Payload Launcher**
-- **eMMC/emuMMC Backup/Restore Tools**
-- **SD Card Partition Manager** -- Prepares and formats SD Card for any combo of HOS (Sys/emuMMC), Android and Linux
-- **emuMMC Creation & Manager** -- Can also migrate and fix existing emuMMC
-- **Switch Android & Linux flasher**
-- **USB Mass Storage (UMS) for SD/eMMC/emuMMC** -- Converts Switch into a SD Card Reader
-- **USB Gamepad** -- Converts Switch with Joycon into a USB HID Gamepad
-- **Hardware and Peripherals info** (SoC, Fuses, RAM, Display, Touch, eMMC, SD, Battery, PSU, Charger)
-- **Many other tools** like Archive Bit Fixer, Touch Calibration, SD/eMMC Benchmark, AutoRCM enabler and more
+- **タッチスクリーンとジョイコン入力をサポートし、完全に設定可能でグラフィカル**
+- **ランチャーのスタイル、背景と色のテーマ**
+- **HOS（Switch OS）ブートローダー** -- CFW Sys/Emu、OFW SysとStock Sys用
+- **AndroidとLinuxのブートローダー**
+- **ペイロードランチャー**
+- **eMMC/emuMMCのバックアップ/リストアツール**
+- **SDカードのパーティション管理ツール** -- HOS（Sys/emuMMC）、Android、Linuxの組み合わせ用にSDカードを準備しフォーマットします。
+- **emuMMCの作成と管理** -- 既存のemuMMCを移行し、修正することもできます。
+- **Switch用AndroidとLinuxをフラッシュ**
+- **SDカード/eMMC/emuMMCをUSB大容量記憶装置(UMS)に** -- SwitchをSDカードリーダーに変換できます
+- **USBゲームパッド** -- ジョイコンを搭載したSwitchをUSB HIDゲームパッドに変換
+- **ハードウェアと周辺機器の情報** (SoC、ヒューズ、RAM、画面、タッチパネル、eMMC, SDカード, バッテリー, PSU, 充電器)
+- **その他多くのツール** アーカイブビットの修正, タッチパネルの較正, SDカード/eMMCのベンチマーク, AutoRCMの有効化など
 
 
 ## Bootloader folders and files
