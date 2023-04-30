@@ -26,8 +26,7 @@
 - **AndroidとLinuxのブートローダー**
 - **ペイロードランチャー**
 - **eMMC/emuMMCのバックアップ/リストアツール**
-- **SDカードのパーティション管理ツール** -- 
-　　　HOS（Sys/emuMMC）、Android、Linuxの組み合わせ用にSDカードを準備しフォーマットします。
+- **SDカードのパーティション管理ツール** -- \nHOS（Sys/emuMMC）、Android、Linuxの組み合わせ用にSDカードを準備しフォーマットします。
 - **emuMMCの作成と管理** -- 既存のemuMMCを移行し、修正することもできます。
 - **Switch用AndroidとLinuxをフラッシュ**
 - **SDカード/eMMC/emuMMCをUSB大容量記憶装置(UMS)に** -- SwitchをSDカードリーダーに変換できます
