@@ -26,13 +26,13 @@
 - **AndroidとLinuxのブートローダー**
 - **ペイロードランチャー**
 - **eMMC/emuMMCのバックアップ/リストアツール**
-- **SDカードのパーティション管理ツール** -- \nHOS（Sys/emuMMC）、Android、Linuxの組み合わせ用にSDカードを準備しフォーマットします。
+- **SDカードのパーティション管理ツール** -- HOS（Sys/emuMMC）、Android、Linuxの組み合わせ用にSDカードを準備しフォーマットします。
 - **emuMMCの作成と管理** -- 既存のemuMMCを移行し、修正することもできます。
 - **Switch用AndroidとLinuxをフラッシュ**
 - **SDカード/eMMC/emuMMCをUSB大容量記憶装置(UMS)に** -- SwitchをSDカードリーダーに変換できます
 - **USBゲームパッド** -- ジョイコンを搭載したSwitchをUSB HIDゲームパッドに変換
-- **ハードウェアと周辺機器の情報** (SoC、ヒューズ、RAM、画面、タッチパネル、eMMC, SDカード, バッテリー, PSU, 充電器)
-- **その他多くのツール** アーカイブビットの修正, タッチパネルの較正, SDカード/eMMCのベンチマーク, AutoRCMの有効化など
+- **ハードウェアと周辺機器の情報** -- (SoC、ヒューズ、RAM、画面、タッチパネル、eMMC, SDカード, バッテリー, PSU, 充電器)
+- **その他多くのツール** -- アーカイブビットの修正, タッチパネルの較正, SDカード/eMMCのベンチマーク, AutoRCMの有効化など
 
 
 ## Bootloader folders and files
