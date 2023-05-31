@@ -121,7 +121,7 @@ lv_obj_t *create_window_autoboot(const char *win_title)
 	lv_win_set_style(win, LV_WIN_STYLE_BG, &win_bg_style);
 	lv_obj_set_size(win, LV_HOR_RES, LV_VER_RES);
 
-	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" Close", _win_autoboot_close_action);
+	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" 閉じる", _win_autoboot_close_action);
 
 	return win;
 }
@@ -186,8 +186,8 @@ static lv_res_t _autoboot_enable_more_action(lv_obj_t *btn)
 
 static void _create_autoboot_window()
 {
-	lv_obj_t *win = create_window_autoboot(SYMBOL_GPS" Auto Boot");
-	lv_win_add_btn(win, NULL, SYMBOL_POWER" Disable", _autoboot_disable_action);
+	lv_obj_t *win = create_window_autoboot(SYMBOL_GPS" 自動起動");
+	lv_win_add_btn(win, NULL, SYMBOL_POWER" 無効", _autoboot_disable_action);
 
 	static lv_style_t h_style;
 	lv_style_copy(&h_style, &lv_style_transp);
@@ -207,7 +207,7 @@ static void _create_autoboot_window()
 	lv_label_set_static_text(label_sep, "");
 
 	lv_obj_t *label_txt = lv_label_create(h1, NULL);
-	lv_label_set_static_text(label_txt, "Main configurations");
+	lv_label_set_static_text(label_txt, "メイン設定");
 	lv_obj_set_style(label_txt, lv_theme_get_current()->label.prim);
 	lv_obj_align(label_txt, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, -(LV_DPI / 4));
 
@@ -255,7 +255,7 @@ static void _create_autoboot_window()
 	lv_label_set_static_text(label_sep, "");
 
 	lv_obj_t *label_txt3 = lv_label_create(h2, NULL);
-	lv_label_set_static_text(label_txt3, "Ini folder configurations");
+	lv_label_set_static_text(label_txt3, "iniフォルダ設定");
 	lv_obj_set_style(label_txt3, lv_theme_get_current()->label.prim);
 	lv_obj_align(label_txt3, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, -LV_DPI / 11);
 
@@ -364,9 +364,9 @@ static lv_res_t _save_nyx_options_action(lv_obj_t *btn)
 	nyx_changes_made = false;
 
 	if (res)
-		lv_mbox_set_text(mbox, "#FF8000 Nyx Configuration#\n\n#96FF00 The configuration was saved to sd card!#");
+		lv_mbox_set_text(mbox, "#FF8000 Nyx設定#\n\n#96FF00 設定をSDカードに保存しました。#");
 	else
-		lv_mbox_set_text(mbox, "#FF8000 Nyx Configuration#\n\n#FFDD00 Failed to save the configuration#\n#FFDD00 to sd card!#");
+		lv_mbox_set_text(mbox, "#FF8000 Nyx設定#\n\n#FFDD00 設定をSDカードに保存できませんでした。#");
 	lv_mbox_add_btns(mbox, mbox_btn_map, NULL);
 	lv_obj_align(mbox, NULL, LV_ALIGN_CENTER, 0, 0);
 	lv_obj_set_top(mbox, true);
@@ -549,9 +549,9 @@ const u16 theme_colors[17] = {
 
 static lv_res_t _create_window_nyx_colors(lv_obj_t *btn)
 {
-	lv_obj_t *win = nyx_create_standard_window(SYMBOL_COPY" Nyx Color Theme");
-	lv_win_add_btn(win, NULL, SYMBOL_HINT" Toggle Background", _preset_bg_action);
-	lv_win_add_btn(win, NULL, SYMBOL_SAVE" Save & Reload", _save_theme_color_action);
+	lv_obj_t *win = nyx_create_standard_window(SYMBOL_COPY" Nyxカラーテーマ");
+	lv_win_add_btn(win, NULL, SYMBOL_HINT" 背景切り替え", _preset_bg_action);
+	lv_win_add_btn(win, NULL, SYMBOL_SAVE" 保存して再読み込み", _save_theme_color_action);
 	color_test.window = win;
 
 	// Set current theme colors.
@@ -611,15 +611,15 @@ static lv_res_t _create_window_nyx_colors(lv_obj_t *btn)
 	color_test.header2 = h2;
 
 	lv_obj_t *lbl_sample = lv_label_create(h2, NULL);
-	lv_label_set_static_text(lbl_sample, "Sample:");
+	lv_label_set_static_text(lbl_sample, "サンプル：");
 
 	lv_obj_t *lbl_test = lv_label_create(h2, NULL);
 	lv_label_set_long_mode(lbl_test, LV_LABEL_LONG_BREAK);
 	lv_label_set_static_text(lbl_test,
-		"Lorem ipsum dolor sit amet, consectetur adipisicing elit, "
-		"sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-		"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
-		"nisi ut aliquip ex ea commodo consequat.");
+		"患者が患者をケアすることは非常に重要であり、"
+		"それが患者の成長につながりますが、同時に多くの労力と痛みが発生することもあります。"
+		"というのは、最も細かい点に至ると、そこから何らかの利益を得ない限り、"
+		"いかなる種類の仕事も実践すべきではないからである。");
 	lv_obj_set_width(lbl_test, lv_obj_get_width(h2) - LV_DPI * 6 / 10);
 	lv_obj_align(lbl_test, lbl_sample, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 5);
 	color_test.label = lbl_test;
@@ -733,12 +733,12 @@ static lv_res_t _create_mbox_clock_edit(lv_obj_t *btn)
 	lv_obj_set_style(dark_bg, &mbox_darken);
 	lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-	static const char * mbox_btn_map[] = { "\251", "\222Done", "\222Cancel", "\251", "" };
+	static const char * mbox_btn_map[] = { "\251", "\222完了", "\222キャンセル", "\251", "" };
 	lv_obj_t *mbox = lv_mbox_create(dark_bg, NULL);
 	lv_mbox_set_recolor_text(mbox, true);
 	lv_obj_set_width(mbox, LV_HOR_RES / 9 * 6);
 
-	lv_mbox_set_text(mbox, "Enter #C7EA46 Date# and #C7EA46 Time# for Nyx\nThis will not alter the actual HW clock!");
+	lv_mbox_set_text(mbox, "Nyxの#C7EA46 日付#と#C7EA46 時刻#を入力します。\nこの設定では。本体時刻は変更されません。");
 
 	// Get current time.
 	rtc_time_t time;
@@ -781,18 +781,18 @@ static lv_res_t _create_mbox_clock_edit(lv_obj_t *btn)
 	// Create month roller.
 	lv_obj_t *roller_month = lv_roller_create(h1, roller_year);
 	lv_roller_set_options(roller_month,
-		"January\n"
-		"February\n"
-		"March\n"
-		"April\n"
-		"May\n"
-		"June\n"
-		"July\n"
-		"August\n"
-		"September\n"
-		"October\n"
-		"November\n"
-		"December");
+		"1月\n"
+		"2月\n"
+		"3月\n"
+		"4月\n"
+		"5月\n"
+		"6月\n"
+		"7月\n"
+		"8月\n"
+		"9月\n"
+		"10月\n"
+		"11月\n"
+		"12月");
 	lv_roller_set_selected(roller_month, time.month - 1, false);
 	lv_obj_align(roller_month, roller_year, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
 	clock_ctxt.month = roller_month;
@@ -929,50 +929,50 @@ disabled:;
 	if (!error)
 	{
 		s_printf(txt_buf,
-			"Dumping to SD card finished!\n"
-			"Saved to: #C7EA46 switchroot/joycon_mac.[bin/ini]#\n\n");
+			"SDカードへのダンプが完了しました。\n"
+			"#C7EA46 switchroot/joycon_mac.[bin/ini]#に保存しました。\n\n");
 
 		bool success = true;
 
 		// Check if pairing info was found.
 		if (joycon_found == 2)
-			strcat(txt_buf, "#C7EA46 Success!#\n#C7EA46 Found 2 out of 2 Joy-Con pairing data!#\n");
+			strcat(txt_buf, "#C7EA46 成功！#\n#C7EA46 ジョイコンのペアリングデータが2個中2個見つかりました。#\n");
 		else
 		{
-			s_printf(txt_buf + strlen(txt_buf), "#FF8000 Failed!#\n#FF8000 Warning:# Found #FFDD00 %d out of 2# pairing data!\n", joycon_found);
+			s_printf(txt_buf + strlen(txt_buf), "#FF8000 失敗！#\n#FF8000 警告：##FFDD00 ペアリングデータが2個中%d個見つかりました。\n", joycon_found);
 			success = false;
 		}
 
 		// Check if pairing was done in HOS.
 		if (is_l_hos && is_r_hos)
-			strcat(txt_buf, "#C7EA46 Both pairing data are HOS based!#");
+			strcat(txt_buf, "#C7EA46 どちらのペアリングデータもHOSベースです。#");
 		else if (!is_l_hos && is_r_hos)
 		{
-			strcat(txt_buf, "#FF8000 Warning:# #FFDD00 Left# pairing data is not HOS based!");
+			strcat(txt_buf, "#FF8000 警告：##FFDD00 左側#のペアリングデータはHOSベースではありません。");
 			success = false;
 		}
 		else if (is_l_hos && !is_r_hos)
 		{
-			strcat(txt_buf, "#FF8000 Warning:# #FFDD00 Right# pairing data is not HOS based!");
+			strcat(txt_buf, "#FF8000 警告：# #FFDD00 右側#のペアリングデータはHOSベースではありません。");
 			success = false;
 		}
 		else
 		{
-			strcat(txt_buf, "#FF8000 Warning:# #FFDD00 No# pairing data is HOS based!");
+			strcat(txt_buf, "#FF8000 警告：#HOSベースのペアリング データはありません。");
 			success = false;
 		}
 
 		if (!success)
 			strcat(txt_buf,
-				"\n\n#FFDD00 Make sure that both Joy-Con are connected,#\n"
-				"#FFDD00 and that you paired them in HOS!#");
+				"\n\n#FFDD00 両方のジョイコンが接続されていることと、#\n"
+				"#FFDD00 HOSでペアリングされていることを確認してください。#");
 	}
 	else
 	{
 		if (!nx_hoag)
-			s_printf(txt_buf, "#FFDD00 Failed to dump Joy-Con pairing info!#\n#FFDD00 Error: %d#", error);
+			s_printf(txt_buf, "#FFDD00 ジョイコンのペアリング情報のダンプに失敗しました。#\n#FFDD00 エラー：%d#", error);
 		else
-			s_printf(txt_buf, "#FFDD00 Not supported on Switch Lite!#\n");
+			s_printf(txt_buf, "#FFDD00 Switch Liteではサポートされていません！#\n");
 	}
 
 	lv_mbox_set_text(mbox, txt_buf);
@@ -1020,14 +1020,14 @@ static void _check_nyx_changes()
 		lv_obj_set_style(dark_bg, &mbox_darken);
 		lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-		static const char * mbox_btn_map[] = { "\222Save", "\222Cancel", "" };
+		static const char * mbox_btn_map[] = { "\222保存", "\222キャンセル", "" };
 		lv_obj_t * mbox = lv_mbox_create(dark_bg, NULL);
 		lv_mbox_set_recolor_text(mbox, true);
 
 		lv_mbox_set_text(mbox,
-			"#FF8000 Nyx configuration#\n\n"
-			"You changed the configuration!\n\n"
-			"Do you want to save it?");
+			"#FF8000 Nyx設定#\n\n"
+			"設定を変更しました。\n\n"
+			"保存しますか？");
 
 		lv_mbox_add_btns(mbox, mbox_btn_map, _action_nyx_options_save);
 		lv_obj_set_width(mbox, LV_HOR_RES / 9 * 5);
@@ -1057,7 +1057,7 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 {
 	lv_theme_t *th = lv_theme_get_current();
 
-	lv_obj_t *win = nyx_create_window_custom_close_btn(SYMBOL_HOME" Nyx Settings", _action_win_nyx_options_close);
+	lv_obj_t *win = nyx_create_window_custom_close_btn(SYMBOL_HOME" Nyx設定", _action_win_nyx_options_close);
 
 	static lv_style_t h_style;
 	lv_style_copy(&h_style, &lv_style_transp);
@@ -1095,13 +1095,13 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	lv_obj_t *btn = lv_btn_create(sw_h2, NULL);
 	lv_obj_t *label_btn = lv_label_create(btn, NULL);
 	lv_btn_set_fit(btn, true, true);
-	lv_label_set_static_text(label_btn, SYMBOL_COPY" Color Theme");
+	lv_label_set_static_text(label_btn, SYMBOL_COPY" カラーテーマ");
 	lv_obj_align(btn, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, -LV_DPI / 5 + 3);
 	lv_btn_set_action(btn, LV_BTN_ACTION_CLICK, _create_window_nyx_colors);
 
 	lv_obj_t *label_txt2 = lv_label_create(sw_h2, NULL);
 	lv_label_set_recolor(label_txt2, true);
-	lv_label_set_static_text(label_txt2, "Select a color for all #00FFC8 highlights# in Nyx.\n");
+	lv_label_set_static_text(label_txt2, "Nyxのすべての#00FFC8 ハイライト#の色を選択します。\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 3 - 8);
 
@@ -1113,7 +1113,7 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	lv_obj_align(line_sep, label_txt2, LV_ALIGN_OUT_BOTTOM_LEFT, -(LV_DPI / 4), LV_DPI / 4);
 
 	lv_obj_t *label_txt = lv_label_create(l_cont, NULL);
-	lv_label_set_static_text(label_txt, SYMBOL_HOME" Home Screen");
+	lv_label_set_static_text(label_txt, SYMBOL_HOME" ホーム画面");
 	lv_obj_set_style(label_txt, th->label.prim);
 	lv_obj_align(label_txt, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 4);
 
@@ -1121,10 +1121,10 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	lv_obj_set_top(ddlist, true);
 	lv_ddlist_set_draw_arrow(ddlist, true);
 	lv_ddlist_set_options(ddlist,
-		"Main menu       \n"
-		"All Configs\n"
-		"Launch\n"
-		"More Configs");
+		"メインメニュー       \n"
+		"設定\n"
+		"起動\n"
+		"その他");
 	lv_ddlist_set_selected(ddlist, n_cfg.home_screen);
 	lv_ddlist_set_action(ddlist, _home_screen_action);
 	lv_obj_align(ddlist, label_txt, LV_ALIGN_OUT_RIGHT_MID, LV_DPI * 2 / 3, 0);
@@ -1132,9 +1132,9 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	label_txt2 = lv_label_create(l_cont, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"Select what screen to show on Nyx boot.\n"
-		"#FF8000 All Configs:# #C7EA46 Combines More configs into Launch empty slots.#\n"
-		"#FF8000 Launch / More Configs:# #C7EA46 Uses the classic divided view.#");
+		"Nyx起動時に表示する画面を選択します。\n"
+		"#FF8000 設定：##C7EA46 追加の構成を『起動』の空のスロットに結合します。#\n"
+		"#FF8000 起動 / その他:##C7EA46 古典的な分割ビューを使用します。#");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, label_txt, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 4);
 
@@ -1143,7 +1143,7 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 
 	// Create entries per line button.
 	lv_obj_t *btn2 = lv_btn_create(sw_h2, NULL);
-	nyx_create_onoff_button(th, sw_h2, btn2, SYMBOL_GPS" Extended Boot Entries", _entries_columns_action, true);
+	nyx_create_onoff_button(th, sw_h2, btn2, SYMBOL_GPS" 拡張起動エントリ", _entries_columns_action, true);
 	lv_obj_align(btn2, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 10);
 	if (n_cfg.entries_5_col)
 		lv_btn_set_state(btn2, LV_BTN_STATE_TGL_REL);
@@ -1152,9 +1152,9 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	label_txt2 = lv_label_create(sw_h2, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"Sets the boot entries per line to 5. (Default is 4)\n"
-		"#C7EA46 This allows a total of 10 boot entries to be shown in Launch#\n"
-		"#C7EA46 and More Configs sections.#\n\n\n");
+		"1行あたりのブート エントリを 5 に設定します。(デフォルトは4)\n"
+		"#C7EA46 これにより、合計10個のブート エントリが『起動』と『その他』に#\n"
+		"#C7EA46 表示されるようになります。#\n\n\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn2, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 12);
 
@@ -1166,15 +1166,15 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	lv_obj_t *btn3 = lv_btn_create(sw_h3, NULL);
 	lv_obj_t *label_btn3 = lv_label_create(btn3, NULL);
 	lv_btn_set_fit(btn3, true, true);
-	lv_label_set_static_text(label_btn3, SYMBOL_DOWNLOAD" Dump Joy-Con BT");
+	lv_label_set_static_text(label_btn3, SYMBOL_DOWNLOAD" ジョイコンBTをダンプ");
 	lv_obj_align(btn3, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, -LV_DPI / 3);
 	lv_btn_set_action(btn3, LV_BTN_ACTION_CLICK, _joycon_info_dump_action);
 
 	label_txt2 = lv_label_create(sw_h3, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"Allows you to save the Switch and Joy-Con MAC addresses\n"
-		"and the LTKs associated with them. For #C7EA46 Android# and #C7EA46 Linux#.");
+		"SwitchとジョイコンのMACアドレスと、\n"
+		"それらに関連付けられたLTKを保存できます。(#C7EA46 Android#と#C7EA46 Linux#の場合)");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn3, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 4);
 
@@ -1183,7 +1183,7 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 
 	// Create Backup/Restore Verification list.
 	label_txt = lv_label_create(sw_h3, NULL);
-	lv_label_set_static_text(label_txt, SYMBOL_MODULES_ALT" Data Verification");
+	lv_label_set_static_text(label_txt, SYMBOL_MODULES_ALT" データ検証");
 	lv_obj_set_style(label_txt, th->label.prim);
 	lv_obj_align(label_txt, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 4);
 
@@ -1191,17 +1191,17 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	lv_obj_set_top(ddlist2, true);
 	lv_ddlist_set_draw_arrow(ddlist2, true);
 	lv_ddlist_set_options(ddlist2,
-		"Off (Fastest)\n"
-		"Sparse (Fast)    \n"
-		"Full (Slow)\n"
-		"Full (Hashes)");
+		"オフ（最速）        \n"
+		"少し（速い）        \n"
+		"フル（遅い）        \n"
+		"フル（ハッシュ）    ");
 	lv_ddlist_set_selected(ddlist2, n_cfg.verification);
 	lv_obj_align(ddlist2, label_txt, LV_ALIGN_OUT_RIGHT_MID, LV_DPI * 3 / 8, 0);
 	lv_ddlist_set_action(ddlist2, _data_verification_action);
 
 	label_txt2 = lv_label_create(sw_h3, NULL);
-	lv_label_set_static_text(label_txt2, "Set the type of data verification done for backup and restore.\n"
-		"Can be canceled without losing the backup/restore.\n");
+	lv_label_set_static_text(label_txt2, "バックアップと復元のために実行されるデータ検証のタイプを設定します。\n"
+		"バックアップ/復元を失うことなくキャンセルできます。\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, label_txt, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 4);
 
@@ -1212,16 +1212,16 @@ lv_res_t create_win_nyx_options(lv_obj_t *parrent_btn)
 	lv_obj_t *btn5 = lv_btn_create(sw_h3, NULL);
 	lv_obj_t *label_btn5 = lv_label_create(btn5, NULL);
 	lv_btn_set_fit(btn5, true, true);
-	lv_label_set_static_text(label_btn5, SYMBOL_CLOCK" Clock (Offset)");
+	lv_label_set_static_text(label_btn5, SYMBOL_CLOCK" 時計（オフセット）");
 	lv_obj_align(btn5, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 4);
 	lv_btn_set_action(btn5, LV_BTN_ACTION_CLICK, _create_mbox_clock_edit);
 
 	label_txt2 = lv_label_create(sw_h3, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"Change clock offset manually.\n"
-		"#C7EA46 The entered Date and Time will be converted to an offset#\n"
-		"#C7EA46 automatically. This will be also used for FatFS operations.#");
+		"時計オフセットを手動で変更します。\n"
+		"#C7EA46 入力された日付と時刻は自動的にオフセットに変換されます。#\n"
+		"#C7EA46 これはFatFS操作にも使用されます。#");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn5, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 4);
 
@@ -1287,14 +1287,14 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 	lv_label_set_recolor(label_btn, true);
 	lv_btn_set_fit(btn, true, true);
 	lv_btn_set_toggle(btn, true);
-	lv_label_set_static_text(label_btn, SYMBOL_GPS" Auto Boot #00FFC9   ON #");
+	lv_label_set_static_text(label_btn, SYMBOL_GPS" 自動起動 #00FFC9   ON #");
 	lv_btn_set_action(btn, LV_BTN_ACTION_CLICK, _autoboot_hide_delay_action);
 	lv_obj_align(btn, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, -LV_DPI / 18 + 6);
 	lv_btn_set_fit(btn, false, false);
 	autoboot_btn = btn;
 
 	lv_obj_t *label_txt2 = lv_label_create(sw_h2, NULL);
-	lv_label_set_static_text(label_txt2, "Choose which boot entry or payload to automatically boot\nwhen injecting.");
+	lv_label_set_static_text(label_txt2, "hekate起動時に自動起動する起動エントリまたはペイロードを選択します。");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 3 - 4);
 
@@ -1306,7 +1306,7 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 
 	// Create Boot time delay list.
 	lv_obj_t *label_txt = lv_label_create(l_cont, NULL);
-	lv_label_set_static_text(label_txt, SYMBOL_CLOCK" Boot Time Delay  ");
+	lv_label_set_static_text(label_txt, SYMBOL_CLOCK" 起動時間の遅延  ");
 	lv_obj_set_style(label_txt, th->label.prim);
 	lv_obj_align(label_txt, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 4);
 
@@ -1314,13 +1314,13 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 	lv_obj_set_top(ddlist, true);
 	lv_ddlist_set_draw_arrow(ddlist, true);
 	lv_ddlist_set_options(ddlist,
-		"No bootlogo    \n"
-		"1 second\n"
-		"2 seconds\n"
-		"3 seconds\n"
-		"4 seconds\n"
-		"5 seconds\n"
-		"6 seconds");
+		"起動ロゴなし    \n"
+		"1秒\n"
+		"2秒\n"
+		"3秒\n"
+		"4秒\n"
+		"5秒\n"
+		"6秒");
 	lv_ddlist_set_selected(ddlist, 3);
 	lv_obj_align(ddlist, label_txt, LV_ALIGN_OUT_RIGHT_MID, LV_DPI / 4, 0);
 	lv_ddlist_set_action(ddlist, _autoboot_delay_action);
@@ -1337,8 +1337,8 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 	label_txt2 = lv_label_create(l_cont, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"Set how long to show bootlogo when autoboot is enabled.\n"
-		"#C7EA46 You can press# #FF8000 VOL-# #C7EA46 during that time to enter hekate's menu.#\n");
+		"自動起動が有効な場合に起動ロゴを表示する時間を設定します。\n"
+		"#C7EA46 その間に# #FF8000 音量-ボタン##C7EA46 を押すと、hekateのメニューに入ることができます。#\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, label_txt, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 4);
 
@@ -1347,15 +1347,15 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 
 	// Create Auto NoGC button.
 	lv_obj_t *btn2 = lv_btn_create(sw_h2, NULL);
-	nyx_create_onoff_button(th, sw_h2, btn2, SYMBOL_SHRK" Auto NoGC", auto_nogc_toggle, true);
+	nyx_create_onoff_button(th, sw_h2, btn2, SYMBOL_SHRK" 自動ヒューズ焼き回避", auto_nogc_toggle, true);
 	lv_obj_align(btn2, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 10);
 
 	label_txt2 = lv_label_create(sw_h2, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"It checks fuses and applies the patch automatically\n"
-		"if higher firmware. It is now a global config and set\n"
-		"at auto by default. (ON: Auto)\n\n\n");
+		"ヒューズをチェックし、\n"
+		"ファームウェアが高い場合は自動的にパッチを適用します。\n"
+		"これはグローバル設定となり、デフォルトで自動に設定されます。(ON: 自動)\n\n\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn2, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 12);
 
@@ -1364,13 +1364,13 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 
 	// Create Auto HOS Power Off button.
 	lv_obj_t *btn3 = lv_btn_create(sw_h3, NULL);
-	nyx_create_onoff_button(th, sw_h3, btn3, SYMBOL_POWER" Auto HOS Power Off", auto_hos_poweroff_toggle, true);
+	nyx_create_onoff_button(th, sw_h3, btn3, SYMBOL_POWER" HOS自動電源オフ", auto_hos_poweroff_toggle, true);
 	lv_obj_align(btn3, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
 
 	label_txt2 = lv_label_create(sw_h3, NULL);
 	lv_label_set_static_text(label_txt2,
-		"When Shutdown is used from HOS, the device wakes up after\n"
-		"15s. Enable this to automatically power off on the next\npayload injection.");
+		"HOSからシャットダウンすると、デバイスは15秒後にウェイクアップします。\n"
+		"有効にすると次回のhekate起動時に自動的に電源がオフになります。");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn3, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 12);
 
@@ -1379,7 +1379,7 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 
 	// Create Backlight slider.
 	label_txt = lv_label_create(sw_h3, NULL);
-	lv_label_set_static_text(label_txt, SYMBOL_BRIGHTNESS" Backlight");
+	lv_label_set_static_text(label_txt, SYMBOL_BRIGHTNESS" 画面の明るさ");
 	lv_obj_set_style(label_txt, th->label.prim);
 	lv_obj_align(label_txt, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 4);
 
@@ -1392,7 +1392,7 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 	lv_obj_align(slider, label_txt, LV_ALIGN_OUT_RIGHT_MID, LV_DPI * 20 / 15, 0);
 
 	label_txt2 = lv_label_create(sw_h3, NULL);
-	lv_label_set_static_text(label_txt2, "Set backlight brightness.\n\n");
+	lv_label_set_static_text(label_txt2, "画面の明るさを設定します。\n\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, label_txt, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 4);
 
@@ -1401,14 +1401,14 @@ void create_tab_options(lv_theme_t *th, lv_obj_t *parent)
 
 	// Create Update r2p button.
 	lv_obj_t *btn4 = lv_btn_create(sw_h3, NULL);
-	nyx_create_onoff_button(th, sw_h3, btn4, SYMBOL_REFRESH" Update Reboot 2 Payload", _update_r2p_action, true);
+	nyx_create_onoff_button(th, sw_h3, btn4, SYMBOL_REFRESH" リブートtoペイロードの更新", _update_r2p_action, true);
 	lv_obj_align(btn4, line_sep, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 10);
 
 	label_txt2 = lv_label_create(sw_h3, NULL);
 	lv_label_set_recolor(label_txt2, true);
 	lv_label_set_static_text(label_txt2,
-		"If #FF8000 FSS0# is used in the selected boot entry, the reboot 2 payload\n"
-		"binary will be checked and forced to be updated to hekate.\n\n\n\n");
+		"選択した起動エントリでFSS0が使用されている場合、\nリブートtoペイロードバイナリがチェックされ、\n"
+		"強制的にhekateに更新されます。\n\n\n\n");
 	lv_obj_set_style(label_txt2, &hint_small_style);
 	lv_obj_align(label_txt2, btn4, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, LV_DPI / 12);
 
