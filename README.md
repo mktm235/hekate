@@ -46,19 +46,19 @@
 |  \|__ patches.ini        | 外部パッチを追加します。スキップ可能。[ここ](./res/patches_template.ini)にテンプレートがあります。  |
 |  \|__ update.bin         | 新しい場合は起動時にロードされます。通常はモッドチップ用です。初回起動時に自動更新および作成されます。|
 | bootloader/ini/          | 個々のiniファイル。`More config`メニュー。自動起動がサポートされています。  |
-| bootloader/res/          | Nyx user resources. Icons and more.                                   |
-|  \|__ background.bmp     | Nyx - Custom background. User provided.                               |
-|  \|__ icon_switch.bmp    | Nyx - Default icon for CFWs.                                          |
-|  \|__ icon_payload.bmp   | Nyx - Default icon for Payloads.                                      |
-| bootloader/sys/          | hekate and Nyx system modules folder.                                 |
-|  \|__ emummc.kipm        | emuMMC KIP1 module. !Important!                                       |
-|  \|__ libsys_lp0.bso     | LP0 (sleep mode) module. Important!                                   |
-|  \|__ libsys_minerva.bso | Minerva Training Cell. Used for DRAM Frequency training. !Important!  |
-|  \|__ nyx.bin            | Nyx - hekate's GUI. !Important!                                       |
-|  \|__ res.pak            | Nyx resources package. !Important!                                    |
-|  \|__ thk.bin            | Atmosphère Tsec Hovi Keygen. !Important!                              |
-| bootloader/screenshots/  | Folder where Nyx screenshots are saved                                |
-| bootloader/payloads/     | For the `Payloads` menu. All CFW bootloaders, tools, Linux payloads are supported. Autoboot only supported by including them into an ini. |
+| bootloader/res/          | Nyxのユーザリソース、アイコンなど。                                   |
+|  \|__ background.bmp     | Nyx - カスタム背景。好きなものを指定できます。                               |
+|  \|__ icon_switch.bmp    | Nyx - CFWのデフォルトのアイコン。                                          |
+|  \|__ icon_payload.bmp   | Nyx - ペイロードのデフォルトのアイコン。                                      |
+| bootloader/sys/          | hekateとNyxのシステムモジュールのフォルダー。                                 |
+|  \|__ emummc.kipm        | emuMMC KIP1モジュール 重要！                                       |
+|  \|__ libsys_lp0.bso     | LP0(スリープモード)モジュール 重要！                                   |
+|  \|__ libsys_minerva.bso | Minervaトレーニングセル。 DRAM周波数トレーニングに使用されます。 重要！  |
+|  \|__ nyx.bin            | Nyx - hekateのGUI 重要！                                       |
+|  \|__ res.pak            | Nyxのリソースパッケージ 重要！                                    |
+|  \|__ thk.bin            | Atmosphère Tsec Hovi Keygen. 重要！                              |
+| bootloader/screenshots/  | Nyxのスクリーンショットが保存されるフォルダー                                |
+| bootloader/payloads/     | `ペイロード`メニューの場合。すべてのCFWブートローダー、ツール、Linuxペイロードがサポートされています。自動ブートは、ini に含めることによってのみサポートされます。 |
 | bootloader/libtools/     | Reserved                                                              |
 
 
