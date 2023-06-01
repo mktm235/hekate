@@ -240,9 +240,9 @@ static lv_res_t _emmc_backup_buttons_raw_toggle(lv_obj_t *btn)
 	else // Backup/Restore from and to emuMMC.
 	{
 		if (!emmc_btn_ctxt.restore)
-			lv_label_set_static_text(lv_obj_get_child(emmc_btn_ctxt.emmc_boot, NULL), SYMBOL_UPLOAD"  SDカード emuMMC BOOT0 & BOOT1");
+			lv_label_set_static_text(lv_obj_get_child(emmc_btn_ctxt.emmc_boot, NULL), SYMBOL_UPLOAD"  SDカード emuMMC BOOT0/1");
 		else
-			lv_label_set_static_text(lv_obj_get_child(emmc_btn_ctxt.emmc_boot, NULL), SYMBOL_DOWNLOAD"  SDカード emuMMC BOOT0 & BOOT1");
+			lv_label_set_static_text(lv_obj_get_child(emmc_btn_ctxt.emmc_boot, NULL), SYMBOL_DOWNLOAD"  SDカード emuMMC BOOT0/1");
 		lv_obj_realign(emmc_btn_ctxt.emmc_boot);
 
 		if (!emmc_btn_ctxt.restore)
@@ -454,7 +454,7 @@ lv_res_t create_window_backup_restore_tool(lv_obj_t *btn)
 
 	lv_obj_t *sd_emummc_raw = lv_btn_create(h3, NULL);
 	nyx_create_onoff_button(lv_theme_get_current(), h3,
-		sd_emummc_raw, SYMBOL_SD" SDカード emuMMC Rawパーティション", _emmc_backup_buttons_raw_toggle, false);
+		sd_emummc_raw, SYMBOL_SD" SDカード emuMMC Raw", _emmc_backup_buttons_raw_toggle, false);
 	emmc_btn_ctxt.raw_emummc = false;
 
 	return LV_RES_OK;

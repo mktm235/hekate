@@ -947,7 +947,7 @@ static lv_res_t _save_file_emummc_cfg_action(lv_obj_t *btn)
 static lv_res_t _create_change_emummc_window(lv_obj_t *btn_caller)
 {
 	lv_obj_t *win = nyx_create_standard_window(SYMBOL_SETTINGS"  emuMMCを変更");
-	lv_win_add_btn(win, NULL, SYMBOL_POWER"  Disable", _save_disable_emummc_cfg_action);
+	lv_win_add_btn(win, NULL, SYMBOL_POWER"  無効化", _save_disable_emummc_cfg_action);
 
 	sd_mount();
 
@@ -1308,7 +1308,7 @@ lv_res_t create_win_emummc_tools(lv_obj_t *btn)
 	label_txt4 = lv_label_create(h2, NULL);
 	lv_label_set_recolor(label_txt4, true);
 	lv_label_set_static_text(label_txt4,
-		"バックアップを#C7EA46 SDファイル#に移行するか、既存の#C7EA46 SD Rawパーティション#を修復します。\n"
+		"バックアップを#C7EA46 SDファイル#に移行するか、\n既存の#C7EA46 SD Rawパーティション#を修復します。\n"
 		"さらに、他のemunandソリューションから移行することもできます。");
 	lv_obj_set_style(label_txt4, &hint_small_style);
 	lv_obj_align(label_txt4, btn4, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI / 3);
