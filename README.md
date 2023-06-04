@@ -1,48 +1,50 @@
-# hekate - Nyx  日本語バージョン
+# hekate - Nyx Japanese Version
 
 ![Image of Hekate](https://user-images.githubusercontent.com/3665130/60391760-bc1e8c00-9afe-11e9-8b7a-b065873081b2.png)
 
 
-Custom Graphical Nintendo Switch bootloader, firmware patcher, tools, and many more.
+カスタムグラフィカルが可能なNintendo SwitchのBootloader。
+
+ファームウェアパッチャー、ツールなど多数の機能が搭載されています。
 
 
 
-- [Features](#features)
-- [Bootloader folders and files](#bootloader-folders-and-files)
-- [Bootloader configuration](#bootloader-configuration)
-  * [hekate global Configuration keys/values](#hekate-global-configuration-keysvalues-when-entry-is-config)
-  * [Boot entry key/value combinations](#boot-entry-keyvalue-combinations)
-  * [Boot entry key/value combinations for Exosphère](#boot-entry-keyvalue-combinations-for-exosphère)
-  * [Payload storage](#payload-storage)
-  * [Nyx Configuration keys/values](#nyx-configuration-keysvalues-nyxini)
+- [機能](#features)
+- [Bootloaderフォルダーとファイル](#bootloader-folders-and-files)
+- [Bootloaderの設定](#bootloader-configuration)
+  * [Hekateグローバル設定キー、設定値](#hekate-global-configuration-keysvalues-when-entry-is-config)
+  * [ブートエントリーキー、設定値の組み合わせ](#boot-entry-keyvalue-combinations)
+  * [ブートエントリーキー、Exosphèreの設定値の組み合わせ](#boot-entry-keyvalue-combinations-for-exosphère)
+  * [Payloadのストレージ](#payload-storage)
+  * [Nyx設定キー、設定値](#nyx-configuration-keysvalues-nyxini)
 
 
 
-## Features
+## 機能
 
-- **Fully Configurable and Graphical** with Touchscreen and Joycon input support
-- **Launcher Style, Background and Color Themes**
-- **HOS (Switch OS) Bootloader** -- For CFW Sys/Emu, OFW Sys and Stock Sys
-- **Android & Linux Bootloader**
-- **Payload Launcher**
-- **eMMC/emuMMC Backup/Restore Tools**
-- **SD Card Partition Manager** -- Prepares and formats SD Card for any combo of HOS (Sys/emuMMC), Android and Linux
-- **emuMMC Creation & Manager** -- Can also migrate and fix existing emuMMC
-- **Switch Android & Linux flasher**
-- **USB Mass Storage (UMS) for SD/eMMC/emuMMC** -- Converts Switch into a SD Card Reader
-- **USB Gamepad** -- Converts Switch with Joycon into a USB HID Gamepad
-- **Hardware and Peripherals info** (SoC, Fuses, RAM, Display, Touch, eMMC, SD, Battery, PSU, Charger)
-- **Many other tools** like Archive Bit Fixer, Touch Calibration, SD/eMMC Benchmark, AutoRCM enabler and more
+- **完全な設定とグラフィカルな操作性** タッチ操作とJoy-Conの操作に対応しています
+- **ランチャーのスタイル、背景、カラーテーマ**
+- **HOS (Switch OS) Bootloader** -- CFW SysまたはEmuでの起動、OFW SysとStock Sysの起動に対応しています
+- **Android & Linux Bootloader** -- AndroidとLinuxの起動に対応しています
+- **Payloadランチャー**
+- **eMMC/emuMMCのバックアップ、復元ツール**
+- **SDカードのパーティション管理** -- HOS (Sys/emuMMC)、AndroidとLinuxのあらゆる組み合わせに対応したSDカードの準備やフォーマットが可能です
+- **emuMMCの作成と管理** -- 既存のemuMMCの移行、修正が可能です。
+- **Switch Android & Linux Flasher**
+- **SD、eMMC、emuMMCにアクセス可能なUSBマスストレージ機能(UMS)** -- SwitchをSDカードリーダーに変身させます
+- **USBゲームパッド** -- Joy-Con付きなSwitchをUSB HIDゲームパッドとして使用が可能になります
+- **ハードウェアと周辺機器の情報** (SoC、ヒューズ、RAM、画面、タッチ、eMMC、SD、バッテリー、PSU、充電)
+- **その他多数のツール** アーカイブビットの修正、タッチのキャリブレーション、SD/eMMCベンチマーク、AutoRCMの有効化など
 
 
-## Bootloader folders and files
+## Bootloaderフォルダーとファイル
 
-| Folder/File              | Description                                                           |
+| フォルダー/ファイル              | 説明                                                           |
 | ------------------------ | --------------------------------------------------------------------- |
-| bootloader               | Main folder.                                                          |
+| bootloader               | メインフォルダー                                                          |
 |  \|__ bootlogo.bmp       | It is used if no `logopath` key is found. User provided. Can be skipped. |
 |  \|__ hekate_ipl.ini     | Main bootloader configuration and boot entries in `Launch` menu.      |
-|  \|__ nyx.ini            | Nyx GUI configuration                                                 |
+|  \|__ nyx.ini            | Nyx GUIの設定                                                 |
 |  \|__ patches.ini        | Add external patches. Can be skipped. A template can be found [here](./res/patches_template.ini) |
 |  \|__ update.bin         | If newer, it is loaded at boot. Normally for modchips. Auto updated and created at first boot. |
 | bootloader/ini/          | For individual inis. `More configs` menu. Autoboot is supported.   |
@@ -55,15 +57,15 @@ Custom Graphical Nintendo Switch bootloader, firmware patcher, tools, and many m
 |  \|__ libsys_lp0.bso     | LP0 (sleep mode) module. Important!                                   |
 |  \|__ libsys_minerva.bso | Minerva Training Cell. Used for DRAM Frequency training. !Important!  |
 |  \|__ nyx.bin            | Nyx - hekate's GUI. !Important!                                       |
-|  \|__ res.pak            | Nyx resources package. !Important!                                    |
+|  \|__ res.pak            | Nyxリソースパッケージ。  !Important!                                    |
 |  \|__ thk.bin            | Atmosphère Tsec Hovi Keygen. !Important!                              |
-| bootloader/screenshots/  | Folder where Nyx screenshots are saved                                |
+| bootloader/screenshots/  | Nyxのスクリーンショット保存先フォルダー                                  |
 | bootloader/payloads/     | For the `Payloads` menu. All CFW bootloaders, tools, Linux payloads are supported. Autoboot only supported by including them into an ini. |
 | bootloader/libtools/     | Reserved                                                              |
 
 
 
-## Bootloader configuration
+## Bootloaderの設定
 
 The bootloader can be configured via 'bootloader/hekate_ipl.ini' (if it is present on the SD card). Each ini section represents a boot entry, except for the special section 'config' that controls the global configuration.
 
@@ -76,7 +78,7 @@ There are four possible type of entries. "**[ ]**": Boot entry, "**{ }**": Capti
 
 ### hekate Global Configuration keys/values (when entry is *[config]*):
 
-| Config option      | Description                                                |
+| コンフィグのオプション      | 説明                                                |
 | ------------------ | ---------------------------------------------------------- |
 | autoboot=0         | 0: Disable, #: Boot entry number to auto boot.             |
 | autoboot_list=0    | 0: Read `autoboot` boot entry from hekate_ipl.ini, 1: Read from ini folder (ini files are ASCII ordered). |
@@ -91,7 +93,7 @@ There are four possible type of entries. "**[ ]**": Boot entry, "**{ }**": Capti
 
 ### Boot entry key/value combinations:
 
-| Config option          | Description                                                |
+| コンフィグのオプション          | 説明                                                |
 | ---------------------- | ---------------------------------------------------------- |
 | warmboot={FILE path}   | Replaces the warmboot binary                               |
 | secmon={FILE path}     | Replaces the security monitor binary                       |
@@ -129,13 +131,13 @@ There are four possible type of entries. "**[ ]**": Boot entry, "**{ }**": Capti
 **Note2**: When using FSS0 it parses exosphere, warmboot and all core kips. You can override the first 2 by using `secmon`/`warmboot` after defining `fss0`.
 You can define `kip1` to load an extra kip or many via the wildcard (`/*`) usage.
 
-**Warning**: Careful when you define *fss0 core* kips when using `fss0` or the folder (when using `/*`) includes them.
+**警告**: Careful when you define *fss0 core* kips when using `fss0` or the folder (when using `/*`) includes them.
 This is in case the kips are incompatible between them. If compatible, you can override `fss0` kips with no issues (useful for testing with intermediate kip changes). In such cases, the `kip1` line must be under `fss0` line.
 
 
 ### Boot entry key/value combinations for Exosphère:
 
-| Config option          | Description                                                |
+| コンフィグのオプション          | 説明                                                |
 | ---------------------- | ---------------------------------------------------------- |
 | nouserexceptions=1     | Disables usermode exception handlers when paired with Exosphère. |
 | userpmu=1              | Enables user access to PMU when paired with Exosphère.     |
@@ -150,11 +152,11 @@ This is in case the kips are incompatible between them. If compatible, you can o
 **Note2**: `blank_prodinfo_{sys/emu}mmc`, `allow_writing_to_cal_sysmmc` and `usb30_force_enabled` in `exosphere.ini` and `system_settings.ini` respectively, are the only atmosphere config keys that can affect hekate booting configuration externally, **if** the equivalent keys in hekate config are missing.
 
 
-### Payload storage:
+### Payloadのストレージ:
 
 hekate has a boot storage in the binary that helps it configure it outside of BPMP enviroment:
 
-| Offset / Name           | Description                                                       |
+| オフセット / 名前           | 説明                                                       |
 | ----------------------- | ----------------------------------------------------------------- |
 | '0x94' boot_cfg         | bit0: `Force AutoBoot`, bit1: `Show launch log`, bit2: `Boot from ID`, bit3: `Boot to emuMMC`. |
 | '0x95' autoboot         | If `Force AutoBoot`, 0: Force go to menu, else boot that entry.   |
@@ -168,7 +170,7 @@ hekate has a boot storage in the binary that helps it configure it outside of BP
 
 ### Nyx Configuration keys/values (nyx.ini):
 
-| Config option      | Description                                                |
+| コンフィグのオプション      | 説明                                                |
 | ------------------ | ---------------------------------------------------------- |
 | themebg=2d2d2d     | Sets Nyx background color in HEX. EXPERIMENTAL.            |
 | themecolor=167     | Sets Nyx color of text highlights.                         |
