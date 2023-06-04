@@ -56,12 +56,14 @@ void lv_font_builtin_init(void)
     /*InterUI 20*/
 #if USE_INTERUI_20 != 0
     lv_font_add(&interui_20, NULL);
+    lv_font_add(&amato_20, NULL);
 #endif
 
     /*SYMBOL 20*/
 #if USE_HEKATE_SYMBOL_20 != 0
 #if USE_INTERUI_20 != 0
     lv_font_add(&hekate_symbol_20, &interui_20);
+    lv_font_add(&hekate_symbol_20, &amato_20);
 #else
     lv_font_add(&hekate_symbol_20, NULL);
 #endif
@@ -70,12 +72,14 @@ void lv_font_builtin_init(void)
     /*InterUI 30*/
 #if USE_INTERUI_30 != 0
     lv_font_add(&interui_30, NULL);
+    lv_font_add(&amato_30, NULL);
 #endif
 
     /*SYMBOL 30*/
 #if USE_HEKATE_SYMBOL_30 != 0
 #if USE_INTERUI_30 != 0
     lv_font_add(&hekate_symbol_30, &interui_30);
+    lv_font_add(&hekate_symbol_30, &amato_30);
 #else
     lv_font_add(&hekate_symbol_30, NULL);
 #endif
