@@ -43,6 +43,7 @@ static bool do_reload = false;
 lv_style_t hint_small_style;
 lv_style_t hint_small_style_white;
 lv_style_t monospace_text;
+lv_style_t credit;
 
 lv_obj_t *payload_list;
 lv_obj_t *autorcm_btn;
@@ -219,7 +220,7 @@ static void _save_fb_to_bmp()
 	// Create notification box.
 	lv_obj_t * mbox = lv_mbox_create(lv_layer_top(), NULL);
 	lv_mbox_set_recolor_text(mbox, true);
-	lv_mbox_set_text(mbox, SYMBOL_CAMERA"  #FFDD00 Saving screenshot...#");
+	lv_mbox_set_text(mbox, SYMBOL_CAMERA"  #FFDD00 スクショを保存中#");
 	lv_obj_set_width(mbox, LV_DPI * 4);
 	lv_obj_set_top(mbox, true);
 	lv_obj_align(mbox, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
@@ -300,9 +301,9 @@ static void _save_fb_to_bmp()
 	free(fb);
 
 	if (!res)
-		lv_mbox_set_text(mbox, SYMBOL_CAMERA"  #96FF00 Screenshot saved!#");
+		lv_mbox_set_text(mbox, SYMBOL_CAMERA"  #96FF00 スクショを保存しました#");
 	else
-		lv_mbox_set_text(mbox, SYMBOL_WARNING"  #FFDD00 Screenshot failed!#");
+		lv_mbox_set_text(mbox, SYMBOL_WARNING"  #FFDD00 スクショの保存に失敗しました#");
 	manual_system_maintenance(true);
 	lv_mbox_start_auto_close(mbox, 4000);
 
@@ -472,7 +473,7 @@ static bool _jc_virt_mouse_read(lv_indev_data_t *data)
 				console_enabled = true;
 				gfx_con_getpos(&gfx_con.savedx, &gfx_con.savedy);
 				gfx_con_setpos(964, 630);
-				gfx_printf("Press -/+ to close");
+				gfx_printf("音量ボタン-/+を押して閉じる");
 				gfx_con_setpos(gfx_con.savedx, gfx_con.savedy);
 			}
 			else
@@ -763,10 +764,10 @@ lv_res_t nyx_generic_onoff_toggle(lv_obj_t *btn)
 	else
 	{
 		if (!(lv_btn_get_state(btn) & LV_BTN_STATE_TGL_REL))
-			lv_label_set_text(label_btn, "#D0D0D0 OFF#");
+			lv_label_set_text(label_btn, "#D0D0D0  OFF#");
 		else
 		{
-			s_printf(label_text, "%s%s", text_color, " ON #");
+			s_printf(label_text, "%s%s", text_color, "   ON#");
 			lv_label_set_text(label_btn, label_text);
 		}
 	}
@@ -804,10 +805,9 @@ bool nyx_emmc_check_battery_enough()
 		lv_mbox_set_recolor_text(mbox, true);
 
 		lv_mbox_set_text(mbox,
-			"#FF8000 Battery Check#\n\n"
-			"#FFDD00 Battery is not enough to carry on#\n"
-			"#FFDD00 with selected operation!#\n\n"
-			"Charge to at least #C7EA46 3650 mV#, and try again!");
+			"#FF8000 バッテリーチェック#\n\n"
+			"#FFDD00 バッテリーが不足しています。#\n\n"
+			"#C7EA46 3650 mV#まで充電してから再度試してください。");
 
 		lv_mbox_add_btns(mbox, mbox_btn_map, mbox_action);
 		lv_obj_set_width(mbox, LV_HOR_RES / 9 * 5);
@@ -831,10 +831,10 @@ static void _nyx_sd_card_issues(void *param)
 	lv_mbox_set_recolor_text(mbox, true);
 
 	lv_mbox_set_text(mbox,
-		"#FF8000 SD Card Issues Check#\n\n"
-		"#FFDD00 The SD Card is initialized in 1-bit mode!#\n"
-		"#FFDD00 This might mean detached or broken connector!#\n\n"
-		"You might want to check\n#C7EA46 Console Info# -> #C7EA46 microSD#");
+		"#FF8000 SDカードの問題チェック#\n\n"
+		"#FFDD00 SDカードは1ビットモードで初期化されています。#\n"
+		"#FFDD00 これは、コネクタが外れているか破損している可能性があります。#\n\n"
+		"確認することをお勧めします。\n#C7EA46 本体情報# -> #C7EA46 SDカード#");
 
 	lv_mbox_add_btns(mbox, mbox_btn_map, mbox_action);
 	lv_obj_set_width(mbox, LV_HOR_RES / 9 * 5);
@@ -891,7 +891,7 @@ lv_obj_t *nyx_create_standard_window(const char *win_title)
 	lv_win_set_style(win, LV_WIN_STYLE_BG, &win_bg_style);
 	lv_obj_set_size(win, LV_HOR_RES, LV_VER_RES);
 
-	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" Close", lv_win_close_action_custom);
+	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" 閉じる", lv_win_close_action_custom);
 
 	return win;
 }
@@ -909,7 +909,7 @@ lv_obj_t *nyx_create_window_custom_close_btn(const char *win_title, lv_action_t 
 	lv_win_set_style(win, LV_WIN_STYLE_BG, &win_bg_style);
 	lv_obj_set_size(win, LV_HOR_RES, LV_VER_RES);
 
-	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" Close", rel_action);
+	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" 閉じる", rel_action);
 
 	return win;
 }
@@ -995,13 +995,13 @@ static void _check_sd_card_removed(void *params)
 		lv_obj_set_style(dark_bg, &mbox_darken);
 		lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-		static const char * mbox_btn_map[] = { "\221Reboot (RCM)", "\221Power Off", "\221Do not reload", "" };
-		static const char * mbox_btn_map_rcm_patched[] = { "\221Reboot", "\221Power Off", "\221Do not reload", "" };
+		static const char * mbox_btn_map[] = { "\221再起動（RCM）", "\221電源オフ", "\221Do not reload", "" };
+		static const char * mbox_btn_map_rcm_patched[] = { "\221再起動", "\221電源オフ", "\221Do not reload", "" };
 		lv_obj_t *mbox = lv_mbox_create(dark_bg, NULL);
 		lv_mbox_set_recolor_text(mbox, true);
 		lv_obj_set_width(mbox, LV_HOR_RES * 6 / 9);
 
-		lv_mbox_set_text(mbox, "\n#FF8000 SD card was removed!#\n\n#96FF00 Nyx will reload after inserting it.#\n\nReminder that you can use UMS instead of removing it.\n");
+		lv_mbox_set_text(mbox, "\n#FF8000 SDカードが抜かれました。#\n\n#96FF00 再度挿入後にnyxが再読み込みされます。#\n\nこれからは、UMSを使用してデータ転送をしてください。\n");
 		lv_mbox_add_btns(mbox, h_cfg.rcm_patched ? mbox_btn_map_rcm_patched : mbox_btn_map, _removed_sd_action);
 
 		lv_obj_align(mbox, NULL, LV_ALIGN_CENTER, 0, 0);
@@ -1032,10 +1032,10 @@ static void _nyx_emmc_issues(void *params)
 		lv_mbox_set_recolor_text(mbox, true);
 
 		lv_mbox_set_text(mbox,
-			"#FF8000 eMMC Issues Check#\n\n"
-			"#FFDD00 Your eMMC is initialized in slower mode!#\n"
-			"#FFDD00 This might mean hardware issues!#\n\n"
-			"You might want to check\n#C7EA46 Console Info# -> #C7EA46 eMMC#");
+			"#FF8000 eMMC問題チェック#\n\n"
+			"#FFDD00 eMMCは低速モードで初期化されています。#\n"
+			"#FFDD00 これはハードウェアの問題をである可能性があります。#\n\n"
+			"確認することをお勧めします。\n#C7EA46 本体情報# -> #C7EA46 eMMC#");
 
 		lv_mbox_add_btns(mbox, mbox_btn_map, mbox_action);
 		lv_obj_set_width(mbox, LV_HOR_RES / 9 * 5);
@@ -1078,13 +1078,13 @@ static lv_res_t _create_mbox_reload(lv_obj_t *btn)
 	lv_obj_set_style(dark_bg, &mbox_darken);
 	lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-	static const char * mbox_btn_map[] = { "\221Reload", "\221Cancel", "" };
+	static const char * mbox_btn_map[] = { "\221再読み込み", "\221キャンセル", "" };
 	lv_obj_t *mbox = lv_mbox_create(dark_bg, NULL);
 	lv_mbox_set_recolor_text(mbox, true);
 	lv_obj_set_width(mbox, LV_HOR_RES * 4 / 10);
 
-	lv_mbox_set_text(mbox, "#FF8000 Do you really want#\n#FF8000 to reload hekate & Nyx?#\n\n"
-		"This also checks\n#96FF00 bootloader/update.bin#\nfor hekate updates");
+	lv_mbox_set_text(mbox, "#FF8000 本当にhekateとNyxを#\n#FF8000 再読み込みしますか？#\n\n"
+		"これによりhekateのアップデートの\n#96FF00 bootloader/update.bin#\nもチェックされます。");
 
 	lv_mbox_add_btns(mbox, mbox_btn_map, reload_action);
 
@@ -1100,14 +1100,14 @@ static lv_res_t _create_mbox_reboot(lv_obj_t *btn)
 	lv_obj_set_style(dark_bg, &mbox_darken);
 	lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-	static const char * mbox_btn_map[] = { "\221OFW", "\221RCM", "\221Cancel", "" };
-	static const char * mbox_btn_map_autorcm[] = { "\261OFW", "\221RCM", "\221Cancel", "" };
-	static const char * mbox_btn_map_patched[] = { "\221OFW", "\221Normal", "\221Cancel", "" };
+	static const char * mbox_btn_map[] = { "\221OFW", "\221RCM", "\221キャンセル", "" };
+	static const char * mbox_btn_map_autorcm[] = { "\261OFW", "\221RCM", "\221キャンセル", "" };
+	static const char * mbox_btn_map_patched[] = { "\221OFW", "\221ノーマル", "\221キャンセル", "" };
 	lv_obj_t *mbox = lv_mbox_create(dark_bg, NULL);
 	lv_mbox_set_recolor_text(mbox, true);
 	lv_obj_set_width(mbox, LV_HOR_RES / 2);
 
-	lv_mbox_set_text(mbox, "#FF8000 Choose where to reboot:#");
+	lv_mbox_set_text(mbox, "#FF8000 どれで再起動しますか？：#");
 
 	if (h_cfg.rcm_patched)
 		lv_mbox_add_btns(mbox, mbox_btn_map_patched, _reboot_action);
@@ -1126,12 +1126,12 @@ static lv_res_t _create_mbox_poweroff(lv_obj_t *btn)
 	lv_obj_set_style(dark_bg, &mbox_darken);
 	lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-	static const char * mbox_btn_map[] = { "\221Power Off", "\221Cancel", "" };
+	static const char * mbox_btn_map[] = { "\221電源オフ", "\221キャンセル", "" };
 	lv_obj_t *mbox = lv_mbox_create(dark_bg, NULL);
 	lv_mbox_set_recolor_text(mbox, true);
 	lv_obj_set_width(mbox, LV_HOR_RES * 4 / 10);
 
-	lv_mbox_set_text(mbox, "#FF8000 Do you really want#\n#FF8000 to power off?#");
+	lv_mbox_set_text(mbox, "#FF8000 本当に電源を切りますか？#");
 
 	lv_mbox_add_btns(mbox, mbox_btn_map, _poweroff_action);
 
@@ -1236,7 +1236,7 @@ static void _create_tab_about(lv_theme_t * th, lv_obj_t * parent)
 	lv_obj_t * lbl_credits = lv_label_create(parent, NULL);
 
 	lv_obj_align(lbl_credits, NULL, LV_ALIGN_IN_TOP_LEFT, LV_DPI / 2, LV_DPI / 2);
-	lv_label_set_style(lbl_credits, &monospace_text);
+	lv_label_set_style(lbl_credits, &credit);
 	lv_label_set_recolor(lbl_credits, true);
 	lv_label_set_static_text(lbl_credits,
 		"#C7EA46 hekate#  (c) 2018,      #C7EA46 naehrwert#, #C7EA46 st4rk#\n"
@@ -1266,7 +1266,7 @@ static void _create_tab_about(lv_theme_t * th, lv_obj_t * parent)
 
 	lv_obj_t * lbl_octopus = lv_label_create(parent, NULL);
 	lv_obj_align(lbl_octopus, lbl_credits, LV_ALIGN_OUT_RIGHT_TOP, -LV_DPI / 10, 0);
-	lv_label_set_style(lbl_octopus, &monospace_text);
+	lv_label_set_style(lbl_octopus, &credit);
 	lv_label_set_recolor(lbl_octopus, true);
 
 	lv_label_set_static_text(lbl_octopus,
@@ -1302,7 +1302,7 @@ static void _create_tab_about(lv_theme_t * th, lv_obj_t * parent)
 	s_printf(version, "Nyx v%d.%d.%d", NYX_VER_MJ, NYX_VER_MN, NYX_VER_HF);
 	lv_obj_t * lbl_ver = lv_label_create(parent, NULL);
 	lv_obj_align(lbl_ver, ctcaer_img, LV_ALIGN_OUT_BOTTOM_RIGHT, -LV_DPI / 20, LV_DPI / 4);
-	lv_label_set_style(lbl_ver, &monospace_text);
+	lv_label_set_style(lbl_ver, &credit);
 	lv_label_set_text(lbl_ver, version);
 }
 
@@ -1390,12 +1390,12 @@ static lv_res_t _create_mbox_payloads(lv_obj_t *btn)
 	lv_obj_set_style(dark_bg, &mbox_darken);
 	lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-	static const char * mbox_btn_map[] = { "\251", "\222Cancel", "\251", "" };
+	static const char * mbox_btn_map[] = { "\251", "\222キャンセル", "\251", "" };
 	lv_obj_t *mbox = lv_mbox_create(dark_bg, NULL);
 	lv_mbox_set_recolor_text(mbox, true);
 	lv_obj_set_width(mbox, LV_HOR_RES * 5 / 9);
 
-	lv_mbox_set_text(mbox, "Select a payload to launch:");
+	lv_mbox_set_text(mbox, "起動するペイロードを選んでください");
 
 	// Create a list with all found payloads.
 	//! TODO: SHould that be tabs with buttons? + Icon support?
@@ -1406,7 +1406,7 @@ static lv_res_t _create_mbox_payloads(lv_obj_t *btn)
 
 	if (!sd_mount())
 	{
-		lv_mbox_set_text(mbox, "#FFDD00 Failed to init SD!#");
+		lv_mbox_set_text(mbox, "#FFDD00 SDカードの読み込みに失敗しました。#");
 
 		goto out_end;
 	}
@@ -1525,7 +1525,7 @@ static lv_obj_t *create_window_launch(const char *win_title)
 
 	lv_win_set_style(win, LV_WIN_STYLE_BG, &win_bg_style);
 
-	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" Close", _win_launch_close_action);
+	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" 閉じる", _win_launch_close_action);
 
 	return win;
 }
@@ -1633,7 +1633,7 @@ static lv_res_t _create_window_home_launch(lv_obj_t *btn)
 	bool combined_cfg = false;
 	if (btn)
 	{
-		if (strcmp(lv_label_get_text(lv_obj_get_child(btn, NULL)) + 8,"Launch#"))
+		if (strcmp(lv_label_get_text(lv_obj_get_child(btn, NULL)) + 8,"起動#"))
 			more_cfg = true;
 	}
 	else
@@ -1650,13 +1650,13 @@ static lv_res_t _create_window_home_launch(lv_obj_t *btn)
 	}
 
 	if (!btn)
-		win = create_window_launch(SYMBOL_GPS" hekate - Launch");
+		win = create_window_launch(SYMBOL_GPS" hekate - 起動");
 	else if (!more_cfg)
-		win = create_window_launch(SYMBOL_GPS" Launch");
+		win = create_window_launch(SYMBOL_GPS" 起動");
 	else
-		win = create_window_launch(SYMBOL_GPS" More Configurations");
+		win = create_window_launch(SYMBOL_GPS" その他");
 
-	lv_win_add_btn(win, NULL, SYMBOL_LIST" Logs #D0D0D0 OFF#", logs_onoff_toggle);
+	lv_win_add_btn(win, NULL, SYMBOL_LIST" ログ #D0D0D0 OFF#", logs_onoff_toggle);
 	launch_logs_enable = false;
 
 	lv_cont_set_fit(lv_page_get_scrl(lv_win_get_content(win)), false, false);
@@ -1924,16 +1924,16 @@ failed_sd_mount:
 		if (!more_cfg)
 		{
 			lv_label_set_static_text(label_error,
-				"#FFDD00 No main boot entries found...#\n"
-				"Check that #96FF00 bootloader/hekate_ipl.ini# has boot entries\n"
-				"or use #C7EA46 More configs# button for more boot entries.");
+				"#FFDD00 メインの起動エントリが見つかりません。#\n"
+				"#96FF00 bootloader/hekate_ipl.ini#にブート エントリがあることを確認するか、\n"
+				"#C7EA46 その他#を選んで起動エントリを追加します。");
 		}
 		else
 		{
 			lv_label_set_static_text(label_error,
-				"#FFDD00 No .ini or boot entries found...#\n"
-				"Check that a .ini file exists in #96FF00 bootloader/ini/#\n"
-				"and that it contains at least one entry.");
+				"#FFDD00 .iniファイルまたは起動エントリが見つかりません。#\n"
+				".iniファイルが#96FF00 bootloader/ini/#に存在し、\n"
+				"少なくとも1つのエントリが含まれていることを確認してください。");
 		}
 
 		lv_obj_set_pos(label_error, 19, 0);
@@ -1953,14 +1953,14 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	// Set brand label.
 	lv_obj_t *label_brand = lv_label_create(parent, NULL);
 	lv_label_set_recolor(label_brand, true);
-	s_printf(btn_colored_text, "%s%s", text_color, " hekate#");
+	s_printf(btn_colored_text, "%s%s", text_color, " hekate　日本語バージョン by mktm235#");
 	lv_label_set_text(label_brand, btn_colored_text);
 	lv_obj_set_pos(label_brand, 50, 48);
 
 	// Set tagline label.
 	lv_obj_t *label_tagline = lv_label_create(parent, NULL);
 	lv_obj_set_style(label_tagline, &hint_small_style_white);
-	lv_label_set_static_text(label_tagline, "THE ALL IN ONE BOOTLOADER FOR ALL YOUR NEEDS");
+	lv_label_set_static_text(label_tagline, "あらゆるニーズに対応するオールインワンブートローダー");
 	lv_obj_set_pos(label_tagline, 50, 82);
 
 	static lv_style_t icons;
@@ -1986,7 +1986,7 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	lv_obj_align(label_btn, NULL, LV_ALIGN_CENTER, 0, -28);
 	lv_obj_t *label_btn2 = lv_label_create(btn_launch, NULL);
 	lv_label_set_recolor(label_btn2, true);
-	s_printf(btn_colored_text, "%s%s", text_color, " Launch#");
+	s_printf(btn_colored_text, "%s%s", text_color, " 起動#");
 	lv_label_set_text(label_btn2, btn_colored_text);
 	lv_obj_align(label_btn2, NULL, LV_ALIGN_IN_TOP_MID, 0, 174);
 
@@ -1999,7 +1999,7 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	lv_btn_set_layout(btn_more_cfg, LV_LAYOUT_OFF);
 	lv_obj_align(label_btn, NULL, LV_ALIGN_CENTER, 0, -28);
 	label_btn2 = lv_label_create(btn_more_cfg, label_btn2);
-	s_printf(btn_colored_text, "%s%s", text_color, " More Configs#");
+	s_printf(btn_colored_text, "%s%s", text_color, " その他#");
 	lv_label_set_text(label_btn2, btn_colored_text);
 	lv_obj_set_pos(btn_more_cfg, 341, 160);
 	lv_obj_align(label_btn2, NULL, LV_ALIGN_IN_TOP_MID, 0, 174);
@@ -2013,7 +2013,7 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	// lv_btn_set_action(btn_quick_launch, LV_BTN_ACTION_CLICK, NULL);
 
 	lv_obj_t *btn_nyx_options = lv_btn_create(parent, NULL);
-	_create_text_button(th, NULL, btn_nyx_options, SYMBOL_SETTINGS" Nyx Settings", NULL);
+	_create_text_button(th, NULL, btn_nyx_options, SYMBOL_SETTINGS" Nyx設定", NULL);
 	//lv_obj_set_width(btn_nyx_options, 256);
 	lv_btn_set_action(btn_nyx_options, LV_BTN_ACTION_CLICK, create_win_nyx_options);
 	lv_obj_align(btn_nyx_options, NULL, LV_ALIGN_IN_BOTTOM_LEFT, LV_DPI / 4, -LV_DPI / 12);
@@ -2027,7 +2027,7 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	lv_btn_set_layout(btn_payloads, LV_LAYOUT_OFF);
 	lv_obj_align(label_btn, NULL, LV_ALIGN_CENTER, 0, -28);
 	label_btn2 = lv_label_create(btn_payloads, label_btn2);
-	s_printf(btn_colored_text, "%s%s", text_color, " Payloads#");
+	s_printf(btn_colored_text, "%s%s", text_color, " ペイロード#");
 	lv_label_set_text(label_btn2, btn_colored_text);
 	lv_obj_set_pos(btn_payloads, 632, 160);
 	lv_obj_align(label_btn2, NULL, LV_ALIGN_IN_TOP_MID, 0, 174);
@@ -2057,13 +2057,13 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	lv_obj_t *btn_power_off = lv_btn_create(parent, NULL);
 	lv_obj_t *btn_reload = lv_btn_create(parent, NULL);
 
-	_create_text_button(th, NULL, btn_power_off, SYMBOL_POWER" Power Off", _create_mbox_poweroff);
+	_create_text_button(th, NULL, btn_power_off, SYMBOL_POWER" 電源オフ", _create_mbox_poweroff);
 	lv_obj_align(btn_power_off, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -LV_DPI / 4, -LV_DPI / 12);
 
-	_create_text_button(th, NULL, btn_reboot, SYMBOL_REBOOT" Reboot", _create_mbox_reboot);
+	_create_text_button(th, NULL, btn_reboot, SYMBOL_REBOOT" 再起動", _create_mbox_reboot);
 	lv_obj_align(btn_reboot, btn_power_off, LV_ALIGN_OUT_LEFT_MID, 0, 0);
 
-	_create_text_button(th, NULL, btn_reload, SYMBOL_REFRESH" Reload", _create_mbox_reload);
+	_create_text_button(th, NULL, btn_reload, SYMBOL_REFRESH" 再読み込み", _create_mbox_reload);
 	lv_obj_align(btn_reload, btn_reboot, LV_ALIGN_OUT_LEFT_MID, 0, 0);
 }
 
@@ -2076,9 +2076,9 @@ static lv_res_t _save_options_action(lv_obj_t *btn)
 	int res = !create_config_entry();
 
 	if (res)
-		lv_mbox_set_text(mbox, "#FF8000 hekate Configuration#\n\n#96FF00 The configuration was saved to sd card!#");
+		lv_mbox_set_text(mbox, "#FF8000 hekateの設定#\n\n#96FF00 設定がSDカードに保存されました。#");
 	else
-		lv_mbox_set_text(mbox, "#FF8000 hekate Configuration#\n\n#FFDD00 Failed to save the configuration#\n#FFDD00 to sd card!#");
+		lv_mbox_set_text(mbox, "#FF8000 hekateの設定#\n\n#FFDD00 設定をSDカードに保存できませんでした。#");
 	lv_mbox_add_btns(mbox, mbox_btn_map, NULL);
 	lv_obj_set_top(mbox, true);
 
@@ -2096,6 +2096,7 @@ static void _create_status_bar(lv_theme_t * th)
 	lv_style_copy(&status_bar_style, &lv_style_plain_color);
 	status_bar_style.body.opa = LV_OPA_0;
 	status_bar_style.body.shadow.width = 0;
+	status_bar_style.text.font = &NotoSans_30;
 
 	lv_obj_set_style(status_bar_bg, &status_bar_style);
 	lv_obj_set_size(status_bar_bg, LV_HOR_RES, LV_DPI * 9 / 14);
@@ -2139,7 +2140,7 @@ static void _create_status_bar(lv_theme_t * th)
 	//! TODO: Utilize it for more.
 	lv_obj_t *btn_mid = lv_btn_create(status_bar_bg, NULL);
 	lv_obj_t *lbl_mid = lv_label_create(btn_mid, NULL);
-	lv_label_set_static_text(lbl_mid, "Save Options");
+	lv_label_set_static_text(lbl_mid, "設定を保存");
 	lv_obj_set_size(btn_mid, LV_DPI * 5 / 2, LV_DPI / 2);
 	lv_obj_align(btn_mid, NULL, LV_ALIGN_CENTER, 0, 0);
 	status_bar.mid = btn_mid;
@@ -2169,14 +2170,14 @@ void nyx_check_ini_changes()
 		lv_obj_set_style(dark_bg, &mbox_darken);
 		lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
-		static const char * mbox_btn_map[] = { "\222Save", "\222Cancel", "" };
+		static const char * mbox_btn_map[] = { "\222保存", "\222キャンセル", "" };
 		lv_obj_t * mbox = lv_mbox_create(dark_bg, NULL);
 		lv_mbox_set_recolor_text(mbox, true);
 
 		lv_mbox_set_text(mbox,
-			"#FF8000 Main configuration#\n\n"
-			"You changed the configuration!\n\n"
-			"Do you want to save it?");
+			"#FF8000 メイン設定#\n\n"
+			"設定が変更されました。\n\n"
+			"保存しますか？");
 
 		lv_mbox_add_btns(mbox, mbox_btn_map, _create_mbox_save_changes_action);
 		lv_obj_set_width(mbox, LV_HOR_RES / 9 * 5);
@@ -2215,11 +2216,11 @@ static void _nyx_set_default_styles(lv_theme_t * th)
 
 	lv_style_copy(&hint_small_style, th->label.hint);
 	hint_small_style.text.letter_space = 1;
-	hint_small_style.text.font = &interui_20;
+	hint_small_style.text.font = &NotoSans_20;
 
 	lv_style_copy(&hint_small_style_white, th->label.prim);
 	hint_small_style_white.text.letter_space = 1;
-	hint_small_style_white.text.font = &interui_20;
+	hint_small_style_white.text.font = &NotoSans_20;
 
 	lv_style_copy(&monospace_text, &lv_style_plain);
 	monospace_text.body.main_color = LV_COLOR_HEX(0x1B1B1B);
@@ -2228,9 +2229,20 @@ static void _nyx_set_default_styles(lv_theme_t * th)
 	monospace_text.body.border.width = 0;
 	monospace_text.body.opa = LV_OPA_TRANSP;
 	monospace_text.text.color = LV_COLOR_HEX(0xD8D8D8);
-	monospace_text.text.font = &ubuntu_mono;
+	monospace_text.text.font = &NotoSans_20;
 	monospace_text.text.letter_space = 0;
 	monospace_text.text.line_space = 0;
+
+	lv_style_copy(&credit, &lv_style_plain);
+	credit.body.main_color = LV_COLOR_HEX(0x1B1B1B);
+	credit.body.grad_color = LV_COLOR_HEX(0x1B1B1B);
+	credit.body.border.color = LV_COLOR_HEX(0x1B1B1B);
+	credit.body.border.width = 0;
+	credit.body.opa = LV_OPA_TRANSP;
+	credit.text.color = LV_COLOR_HEX(0xD8D8D8);
+	credit.text.font = &ubuntu_mono;
+	credit.text.letter_space = 0;
+	credit.text.line_space = 0;
 
 	lv_style_copy(&btn_transp_rel, th->btn.rel);
 	btn_transp_rel.body.main_color = LV_COLOR_HEX(0x444444);
@@ -2332,17 +2344,17 @@ static void _nyx_main_menu(lv_theme_t * th)
 	s_printf(version, "hekate v%d.%d.%d", nyx_str->version & 0xFF, (nyx_str->version >> 8) & 0xFF, (nyx_str->version >> 16) & 0xFF);
 	lv_obj_t *tab_about = lv_tabview_add_tab(tv, version);
 
-	lv_obj_t *tab_home = lv_tabview_add_tab(tv, SYMBOL_HOME" Home");
+	lv_obj_t *tab_home = lv_tabview_add_tab(tv, SYMBOL_HOME" ホーム");
 
-	lv_obj_t *tab_tools = lv_tabview_add_tab(tv, SYMBOL_TOOLS" Tools");
+	lv_obj_t *tab_tools = lv_tabview_add_tab(tv, SYMBOL_TOOLS" ツール");
 	lv_page_set_style(tab_tools, LV_PAGE_STYLE_BG, &no_padding);
 	lv_page_set_style(tab_tools, LV_PAGE_STYLE_SCRL, &no_padding);
 
-	lv_obj_t *tab_info = lv_tabview_add_tab(tv, SYMBOL_INFO" Console Info");
+	lv_obj_t *tab_info = lv_tabview_add_tab(tv, SYMBOL_INFO" 本体情報");
 	lv_page_set_style(tab_info, LV_PAGE_STYLE_BG, &no_padding);
 	lv_page_set_style(tab_info, LV_PAGE_STYLE_SCRL, &no_padding);
 
-	lv_obj_t *tab_options = lv_tabview_add_tab(tv, SYMBOL_SETTINGS" Options");
+	lv_obj_t *tab_options = lv_tabview_add_tab(tv, SYMBOL_SETTINGS" オプション");
 
 	_create_tab_about(th, tab_about);
 	_create_tab_home(th, tab_home);
