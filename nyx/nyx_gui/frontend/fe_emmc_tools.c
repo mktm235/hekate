@@ -1431,8 +1431,10 @@ void restore_emmc_selected(emmcPartType_t restoreType, emmc_tool_gui_t *gui)
 
 	int i = 0;
 	char sdPath[OUT_FILENAME_SZ];
-
-	emmcsn_path_impl(sdPath, "/restore", "", &emmc_storage);
+	if (!gui->raw_emummc)
+		emmcsn_path_impl(sdPath, "/restore", "", &emmc_storage);
+	else
+		emmcsn_path_impl(sdPath, "/restore/emummc", "", &emmc_storage);
 	gui->base_path = (char *)malloc(strlen(sdPath) + 1);
 	strcpy(gui->base_path, sdPath);
 

@@ -53,7 +53,7 @@ static void _create_window_backup_restore(emmcPartType_t type, const char* win_l
 
 	char win_label_full[80];
 
-	s_printf(win_label_full, "%s%s", emmc_btn_ctxt.restore ? SYMBOL_DOWNLOAD" リストア " : SYMBOL_UPLOAD" バックアップ ", win_label+3);
+	s_printf(win_label_full, "%s%s", emmc_btn_ctxt.restore ? SYMBOL_DOWNLOAD"  復元 " : SYMBOL_UPLOAD"  バックアップ ", win_label+3);
 
 	lv_obj_t *win = nyx_create_standard_window(win_label_full);
 
@@ -271,13 +271,13 @@ lv_res_t create_window_backup_restore_tool(lv_obj_t *btn)
 	lv_obj_t *win;
 
 	emmc_btn_ctxt.restore = false;
-	if (strcmp(lv_label_get_text(lv_obj_get_child(btn, NULL)), SYMBOL_UPLOAD"  Backup eMMC"))
+	if (strcmp(lv_label_get_text(lv_obj_get_child(btn, NULL)), SYMBOL_UPLOAD"  eMMCのバックアップ"))
 		emmc_btn_ctxt.restore = true;
 
 	if (!emmc_btn_ctxt.restore)
-		win = nyx_create_standard_window(SYMBOL_SD" Backup");
+		win = nyx_create_standard_window(SYMBOL_SD" バックアップ");
 	else
-		win = nyx_create_standard_window(SYMBOL_SD" Restore");
+		win = nyx_create_standard_window(SYMBOL_SD" 復元");
 
 	static lv_style_t h_style;
 	lv_style_copy(&h_style, &lv_style_transp);
@@ -297,7 +297,7 @@ lv_res_t create_window_backup_restore_tool(lv_obj_t *btn)
 	lv_label_set_static_text(label_sep, "");
 
 	lv_obj_t *label_txt = lv_label_create(h1, NULL);
-	lv_label_set_static_text(label_txt, "Full");
+	lv_label_set_static_text(label_txt, "フル");
 	lv_obj_set_style(label_txt, lv_theme_get_current()->label.prim);
 	lv_obj_align(label_txt, label_sep, LV_ALIGN_OUT_BOTTOM_LEFT, LV_DPI / 4, -LV_DPI * 3 / 10);
 
