@@ -225,7 +225,7 @@ void pkg2_get_newkern_info(u8 *kern_data)
 
 	pkg2_newkern_ini1_start = *(u32 *)(kern_data + pkg2_newkern_ini1_info);
 	pkg2_newkern_ini1_end   = *(u32 *)(kern_data + pkg2_newkern_ini1_info + 0x8);
-	
+
 	// On v2 kernel with dynamic crt, values are relative to value address.
 	if (crt_start)
 	{

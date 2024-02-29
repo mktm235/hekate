@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023 CTCaer
+ * Copyright (c) 2018-2024 CTCaer
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -66,7 +66,9 @@ char *text_color;
 typedef struct _jc_lv_driver_t
 {
 	lv_indev_t *indev;
-	bool centering_done;
+// LV_INDEV_READ_PERIOD * JC_CAL_MAX_STEPS = 264 ms.
+#define JC_CAL_MAX_STEPS 8
+	u32 calibration_step;
 	u16 cx_max;
 	u16 cx_min;
 	u16 cy_max;
@@ -413,7 +415,7 @@ static bool _jc_virt_mouse_read(lv_indev_data_t *data)
 	}
 
 	// Calibrate left stick.
-	if (!jc_drv_ctx.centering_done)
+	if (jc_drv_ctx.calibration_step != JC_CAL_MAX_STEPS)
 	{
 		if (n_cfg.jc_force_right)
 		{
@@ -421,11 +423,11 @@ static bool _jc_virt_mouse_read(lv_indev_data_t *data)
 				&& jc_pad->rstick_x > 0x400 && jc_pad->rstick_y > 0x400
 				&& jc_pad->rstick_x < 0xC00 && jc_pad->rstick_y < 0xC00)
 			{
+				jc_drv_ctx.calibration_step++;
 				jc_drv_ctx.cx_max = jc_pad->rstick_x + 0x96;
 				jc_drv_ctx.cx_min = jc_pad->rstick_x - 0x96;
 				jc_drv_ctx.cy_max = jc_pad->rstick_y + 0x96;
 				jc_drv_ctx.cy_min = jc_pad->rstick_y - 0x96;
-				jc_drv_ctx.centering_done = true;
 				jc_drv_ctx.cursor_timeout = 0;
 			}
 		}
@@ -433,14 +435,15 @@ static bool _jc_virt_mouse_read(lv_indev_data_t *data)
 			     && jc_pad->lstick_x > 0x400 && jc_pad->lstick_y > 0x400
 			     && jc_pad->lstick_x < 0xC00 && jc_pad->lstick_y < 0xC00)
 		{
+			jc_drv_ctx.calibration_step++;
 			jc_drv_ctx.cx_max = jc_pad->lstick_x + 0x96;
 			jc_drv_ctx.cx_min = jc_pad->lstick_x - 0x96;
 			jc_drv_ctx.cy_max = jc_pad->lstick_y + 0x96;
 			jc_drv_ctx.cy_min = jc_pad->lstick_y - 0x96;
-			jc_drv_ctx.centering_done = true;
 			jc_drv_ctx.cursor_timeout = 0;
 		}
-		else
+
+		if (jc_drv_ctx.calibration_step != JC_CAL_MAX_STEPS)
 		{
 			data->state = LV_INDEV_STATE_REL;
 			return false;
@@ -448,13 +451,10 @@ static bool _jc_virt_mouse_read(lv_indev_data_t *data)
 	}
 
 	// Re-calibrate on disconnection.
-	if (n_cfg.jc_force_right)
-	{
-		if (!jc_pad->conn_r)
-			jc_drv_ctx.centering_done = 0;
-	}
-	else if (!jc_pad->conn_l)
-		jc_drv_ctx.centering_done = 0;
+	if (n_cfg.jc_force_right && !jc_pad->conn_r)
+		jc_drv_ctx.calibration_step = 0;
+	else if (!n_cfg.jc_force_right && !jc_pad->conn_l)
+		jc_drv_ctx.calibration_step = 0;
 
 	// Set button presses.
 	if (jc_pad->a || jc_pad->zl || jc_pad->zr)
@@ -1294,15 +1294,20 @@ static void _create_tab_about(lv_theme_t * th, lv_obj_t * parent)
 	lv_img_set_src(hekate_img, &hekate_logo);
 	lv_obj_align(hekate_img, lbl_octopus, LV_ALIGN_OUT_BOTTOM_LEFT, 0, LV_DPI * 2 / 3);
 
+	lv_obj_t *mktm_img = lv_img_create(parent, NULL);
+	lv_img_set_src(mktm_img, &mktm_logo);
+	lv_obj_align(mktm_img, lbl_octopus, LV_ALIGN_OUT_BOTTOM_RIGHT, 10, LV_DPI * 2 / 3);
+
+	
 	lv_obj_t *ctcaer_img = lv_img_create(parent, NULL);
 	lv_img_set_src(ctcaer_img, &ctcaer_logo);
-	lv_obj_align(ctcaer_img, lbl_octopus, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, LV_DPI * 2 / 3);
+	lv_obj_align(ctcaer_img, lbl_octopus, LV_ALIGN_OUT_BOTTOM_MID, 0, LV_DPI * 2 / 3);
 
 	char version[32];
 	s_printf(version, "Nyx v%d.%d.%d", NYX_VER_MJ, NYX_VER_MN, NYX_VER_HF);
 	lv_obj_t * lbl_ver = lv_label_create(parent, NULL);
-	lv_obj_align(lbl_ver, ctcaer_img, LV_ALIGN_OUT_BOTTOM_RIGHT, -LV_DPI / 20, LV_DPI / 4);
-	lv_label_set_style(lbl_ver, &credit);
+	lv_obj_align(lbl_ver, mktm_img, LV_ALIGN_OUT_BOTTOM_RIGHT, -LV_DPI / 20, LV_DPI / 4);
+	lv_label_set_style(lbl_ver, &monospace_text);
 	lv_label_set_text(lbl_ver, version);
 }
 
@@ -1330,11 +1335,13 @@ static void _update_status_bar(void *params)
 	max17050_get_property(MAX17050_VCELL, &batt_volt);
 	max17050_get_property(MAX17050_Current, &batt_curr);
 
-	// Enable fan if more than 46 oC.
+	// Enable fan if more than 41 oC.
 	u32 soc_temp_dec = (soc_temp >> 8);
 	if (soc_temp_dec > 51)
 		set_fan_duty(102);
 	else if (soc_temp_dec > 46)
+		set_fan_duty(76);
+	else if (soc_temp_dec > 41)
 		set_fan_duty(51);
 	else if (soc_temp_dec < 40)
 		set_fan_duty(0);
@@ -1406,7 +1413,7 @@ static lv_res_t _create_mbox_payloads(lv_obj_t *btn)
 
 	if (!sd_mount())
 	{
-		lv_mbox_set_text(mbox, "#FFDD00 SDカードの読み込みに失敗しました。#");
+		lv_mbox_set_text(mbox, "#FFDD00 SDカードの読み込みに失敗しました。");
 
 		goto out_end;
 	}
@@ -1953,7 +1960,7 @@ static void _create_tab_home(lv_theme_t *th, lv_obj_t *parent)
 	// Set brand label.
 	lv_obj_t *label_brand = lv_label_create(parent, NULL);
 	lv_label_set_recolor(label_brand, true);
-	s_printf(btn_colored_text, "%s%s", text_color, " hekate　日本語バージョン by mktm235#");
+	s_printf(btn_colored_text, "%s%s", text_color, " hekate　日本語バージョン#");
 	lv_label_set_text(label_brand, btn_colored_text);
 	lv_obj_set_pos(label_brand, 50, 48);
 
@@ -2086,7 +2093,7 @@ static lv_res_t _save_options_action(lv_obj_t *btn)
 	lv_obj_set_top(mbox, true);
 
 	nyx_options_clear_ini_changes_made();
-	
+
 	sd_unmount();
 
 	return LV_RES_OK;
@@ -2101,7 +2108,6 @@ static void _create_status_bar(lv_theme_t * th)
 	lv_style_copy(&status_bar_style, &lv_style_plain_color);
 	status_bar_style.body.opa = LV_OPA_0;
 	status_bar_style.body.shadow.width = 0;
-	status_bar_style.text.font = &NotoSans_30;
 
 	lv_obj_set_style(status_bar_bg, &status_bar_style);
 	lv_obj_set_size(status_bar_bg, LV_HOR_RES, LV_DPI * 9 / 14);

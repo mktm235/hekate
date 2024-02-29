@@ -32,6 +32,7 @@
 
 nyx_config n_cfg;
 hekate_config h_cfg;
+bool custom_font_flag;
 
 const volatile ipl_ver_meta_t __attribute__((section ("._ipl_version"))) ipl_ver = {
 	.magic = NYX_MAGIC,
@@ -305,6 +306,20 @@ static int nyx_load_resources()
 
 	return res;
 }
+static int nyx_load_customfont()
+{
+	FIL fp;
+	int res;
+
+	res = f_open(&fp, "bootloader/sys/res2.pak", FA_READ);
+	if (res)
+		return res;
+
+	res = f_read(&fp, (void *)DRAM_MEM_HOLE_ADR, f_size(&fp), NULL);
+	f_close(&fp);
+
+	return res;
+}
 
 static void nyx_load_bg_icons()
 {
@@ -458,6 +473,14 @@ void nyx_init_load_res()
 		// Try again.
 		if (nyx_load_resources())
 			_show_errors(SD_FILE_ERROR); // Fatal since resources are mandatory.
+	}
+	// Nyx用のカスタムフォントが有れば読み込む
+	custom_font_flag=true;
+	if (nyx_load_customfont())
+	{
+		// 一応もっかいやってみる
+		if (nyx_load_customfont())
+			custom_font_flag=false; // 無ければ無いでよろしい
 	}
 
 	// Initialize nyx cfg to lower clock on first boot.

@@ -47,6 +47,7 @@ typedef struct _gui_status_bar_ctx
 extern lv_style_t hint_small_style;
 extern lv_style_t hint_small_style_white;
 extern lv_style_t monospace_text;
+extern lv_style_t credit;
 
 extern lv_obj_t *payload_list;
 extern lv_obj_t *autorcm_btn;
@@ -79,5 +80,5 @@ void nyx_create_onoff_button(lv_theme_t *th, lv_obj_t *parent, lv_obj_t *btn, co
 lv_res_t nyx_generic_onoff_toggle(lv_obj_t *btn);
 void manual_system_maintenance(bool refresh);
 void nyx_load_and_run();
-
+extern int custom_font_flag;
 #endif
