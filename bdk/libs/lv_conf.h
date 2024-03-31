@@ -126,7 +126,7 @@
 #define LV_COLOR_TRANSP        LV_COLOR_LIME     /*Images pixels with this color will not be drawn (with chroma keying)*/
 
 /*Text settings*/
-#define LV_TXT_UTF8             1                /*Enable UTF-8 coded Unicode character usage */
+#define LV_TXT_UTF8             0                /*Enable UTF-8 coded Unicode character usage */
 #define LV_TXT_BREAK_CHARS     " ,.;:-_"         /*Can break texts on these chars*/
 #define LV_TXT_LINE_BREAK_LONG_LEN 12            /* If a character is at least this long, will break wherever "prettiest" */
 #define LV_TXT_LINE_BREAK_LONG_PRE_MIN_LEN 3     /* Minimum number of characters of a word to put on a line before a break */
@@ -203,10 +203,9 @@
  * #define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(my_font_1) \
  *                                LV_FONT_DECLARE(my_font_2) \
  */
-#define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(NotoSans_30) \
-                               LV_FONT_DECLARE(NotoSans_20) \
+#define LV_FONT_CUSTOM_DECLARE
 
-#define LV_FONT_DEFAULT        &NotoSans_30     /*Always set a default font from the built-in fonts*/
+#define LV_FONT_DEFAULT        &interui_30     /*Always set a default font from the built-in fonts*/
 
 /*===================
  *  LV_OBJ SETTINGS
@@ -374,3 +373,4 @@
 #define USE_LV_SW        1
 
 #endif /*LV_CONF_H*/
+

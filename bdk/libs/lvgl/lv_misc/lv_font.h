@@ -36,7 +36,7 @@ extern "C" {
 typedef struct
 {
     uint32_t w_px         :8;
-    uint32_t glyph_index  :32;
+    uint32_t glyph_index  :24;
 } lv_font_glyph_dsc_t;
 
 typedef struct
