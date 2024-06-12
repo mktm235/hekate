@@ -32,7 +32,6 @@
 
 nyx_config n_cfg;
 hekate_config h_cfg;
-bool custom_font_flag;
 
 const volatile ipl_ver_meta_t __attribute__((section ("._ipl_version"))) ipl_ver = {
 	.magic = NYX_MAGIC,
@@ -180,12 +179,12 @@ lv_res_t launch_payload(lv_obj_t *list)
 	if (size < 0x30000)
 	{
 		reloc_patcher(PATCHED_RELOC_ENTRY, EXT_PAYLOAD_ADDR, ALIGN(size, 0x10));
-		hw_reinit_workaround(false, byte_swap_32(*(u32 *)(buf + size - sizeof(u32))));
+		hw_deinit(false, byte_swap_32(*(u32 *)(buf + size - sizeof(u32))));
 	}
 	else
 	{
 		reloc_patcher(PATCHED_RELOC_ENTRY, EXT_PAYLOAD_ADDR, 0x7000);
-		hw_reinit_workaround(true, 0);
+		hw_deinit(true, 0);
 	}
 
 	void (*ext_payload_ptr)() = (void *)EXT_PAYLOAD_ADDR;
@@ -310,20 +309,6 @@ static int nyx_load_resources()
 
 	return res;
 }
-static int nyx_load_customfont()
-{
-	FIL fp;
-	int res;
-
-	res = f_open(&fp, "bootloader/sys/res2.pak", FA_READ);
-	if (res)
-		return res;
-
-	res = f_read(&fp, (void *)DRAM_MEM_HOLE_ADR, f_size(&fp), NULL);
-	f_close(&fp);
-
-	return res;
-}
 
 static void nyx_load_bg_icons()
 {
@@ -369,8 +354,8 @@ static void _show_errors(int sd_error)
 		gfx_clear_grey(0);
 		gfx_con_setpos(0, 0, 0);
 		display_backlight_brightness(150, 1000);
-		display_init_framebuffer_log();
-		display_activate_console();
+		display_init_window_d_console();
+		display_window_d_console_enable();
 	}
 
 	switch (sd_error)
@@ -477,14 +462,6 @@ void nyx_init_load_res()
 		// Try again.
 		if (nyx_load_resources())
 			_show_errors(SD_FILE_ERROR); // Fatal since resources are mandatory.
-	}
-	// Nyx用のカスタムフォントが有れば読み込む
-	custom_font_flag=true;
-	if (nyx_load_customfont())
-	{
-		// 一応もっかいやってみる
-		if (nyx_load_customfont())
-			custom_font_flag=false; // 無ければ無いでよろしい
 	}
 
 	// Initialize nyx cfg to lower clock on first boot.

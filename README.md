@@ -1,51 +1,51 @@
-# hekate - Nyx　日本語バージョン
+# hekate - Nyx
 
-![Hekateの写真](https://user-images.githubusercontent.com/3665130/60391760-bc1e8c00-9afe-11e9-8b7a-b065873081b2.png)
-
-
-カスタムグラフィカルNintendo Switchブートローダー、ファームウェア パッチャー、ツールなど。
+![Image of Hekate](https://user-images.githubusercontent.com/3665130/60391760-bc1e8c00-9afe-11e9-8b7a-b065873081b2.png)
 
 
-
-- [特徴](#特徴)
-- [ブートローダーのフォルダとファイル](#bootloader-folders-and-files)
-- [ブートローダーの設定](#bootloader-configuration)
-  * [hekateグローバル設定](#hekate-global-configuration-keysvalues-when-entry-is-config)
-  * [起動エントリ](#boot-entry-keyvalue-combinations)
-  * [Exosphèreの起動エントリ](#boot-entry-keyvalue-combinations-for-exosphère)
-  * [ペイロード](#payload-storage)
-  * [Nyx設定](#nyx-configuration-keysvalues-nyxini)
+Custom Graphical Nintendo Switch bootloader, firmware patcher, tools, and many more.
 
 
 
-## 特徴
+- [Features](#features)
+- [Bootloader folders and files](#bootloader-folders-and-files)
+- [Bootloader configuration](#bootloader-configuration)
+  * [hekate global Configuration keys/values](#hekate-global-configuration-keysvalues-when-entry-is-config)
+  * [Boot entry key/value combinations](#boot-entry-keyvalue-combinations)
+  * [Boot entry key/value combinations for Exosphère](#boot-entry-keyvalue-combinations-for-exosphère)
+  * [Payload storage](#payload-storage)
+  * [Nyx Configuration keys/values](#nyx-configuration-keysvalues-nyxini)
 
-- **タッチスクリーンとジョイコン入力をサポートし、完全に設定可能でグラフィカル**
-- **ランチャーのスタイル、背景と色のテーマ**
-- **HOS（Switch OS）ブートローダー** -- CFW Sys/Emu、OFW SysとStock Sys用
-- **AndroidとLinuxのブートローダー**
-- **ペイロードランチャー**
-- **eMMC/emuMMCのバックアップ/リストアツール**
-- **SDカードのパーティション管理ツール** -- HOS（Sys/emuMMC）、Android、Linuxの組み合わせ用にSDカードを準備しフォーマットします。
-- **emuMMCの作成と管理** -- 既存のemuMMCを移行し、修正することもできます。
-- **Switch用AndroidとLinuxをフラッシュ**
-- **SDカード/eMMC/emuMMCをUSB大容量記憶装置(UMS)に** -- SwitchをSDカードリーダーに変換できます
-- **USBゲームパッド** -- ジョイコンを搭載したSwitchをUSB HIDゲームパッドに変換
-- **ハードウェアと周辺機器の情報** -- (SoC、ヒューズ、RAM、画面、タッチパネル、eMMC, SDカード, バッテリー, PSU, 充電器)
-- **その他多くのツール** -- アーカイブビットの修正, タッチパネルの較正, SDカード/eMMCのベンチマーク, AutoRCMの有効化など
+
+
+## Features
+
+- **Fully Configurable and Graphical** with Touchscreen and Joycon input support
+- **Launcher Style, Background and Color Themes**
+- **HOS (Switch OS) Bootloader** -- For CFW Sys/Emu, OFW Sys and Stock Sys
+- **Android & Linux Bootloader**
+- **Payload Launcher**
+- **eMMC/emuMMC Backup/Restore Tools**
+- **SD Card Partition Manager** -- Prepares and formats SD Card for any combo of HOS (Sys/emuMMC), Android and Linux
+- **emuMMC Creation & Manager** -- Can also migrate and fix existing emuMMC
+- **Switch Android & Linux flasher**
+- **USB Mass Storage (UMS) for SD/eMMC/emuMMC** -- Converts Switch into a SD Card Reader
+- **USB Gamepad** -- Converts Switch with Joycon into a USB HID Gamepad
+- **Hardware and Peripherals info** (SoC, Fuses, RAM, Display, Touch, eMMC, SD, Battery, PSU, Charger)
+- **Many other tools** like Archive Bit Fixer, Touch Calibration, SD/eMMC Benchmark, AutoRCM enabler and more
 
 
 ## Bootloader folders and files
 
-| フォルダー / ファイル             | 説明                                                           |
+| Folder/File              | Description                                                           |
 | ------------------------ | --------------------------------------------------------------------- |
-| bootloader               | メインのフォルダー                                                          |
-|  \|__ bootlogo.bmp       | `logopath`が指定されていない場合に使用されます。スキップ可能。 |
-|  \|__ hekate_ipl.ini     | `Launch`メニュー内の主なブートローダー設定と起動エントリ。      |
-|  \|__ nyx.ini            | Nyx GUIの設定。                                                 |
-|  \|__ patches.ini        | 外部パッチを追加します。スキップ可能。[ここ](./res/patches_template.ini)にテンプレートがあります。  |
-|  \|__ update.bin         | 新しい場合は起動時にロードされます。通常はモッドチップ用です。初回起動時に自動更新および作成されます。|
-| bootloader/ini/          | 個々のiniファイル。`More config`メニュー。自動起動がサポートされています。  |
+| bootloader               | Main folder.                                                          |
+|  \|__ bootlogo.bmp       | It is used if no `logopath` key is found. User provided. Can be skipped. |
+|  \|__ hekate_ipl.ini     | Main bootloader configuration and boot entries in `Launch` menu.      |
+|  \|__ nyx.ini            | Nyx GUI configuration                                                 |
+|  \|__ patches.ini        | Add external patches. Can be skipped. A template can be found [here](./res/patches_template.ini) |
+|  \|__ update.bin         | If newer, it is loaded at boot. Normally for modchips. Auto updated and created at first boot. |
+| bootloader/ini/          | For individual inis. `More configs` menu. Autoboot is supported.   |
 | bootloader/res/          | Nyx user resources. Icons and more.                                   |
 |  \|__ background.bmp     | Nyx - Custom background. User provided.                               |
 |  \|__ icon_switch.bmp    | Nyx - Default icon for CFWs.                                          |
@@ -116,9 +116,12 @@ There are four possible type of entries. "**[ ]**": Boot entry, "**{ }**": Capti
 | l4t=1                  | L4T Linux/Android native launching.                        |
 | boot_prefixes={FOLDER path} | L4T bootstack directory.                              |
 | ram_oc=0               | L4T RAM Overclocking. Check README_CONFIG.txt for more info. |
+| ram_oc_vdd2=1100       | L4T RAM VDD2 Voltage. Set VDD2 (T210B01) or VDD2/VDDQ (T210) voltage. 1050-1175. |
+| ram_oc_vddq=600        | L4T RAM VDDQ Voltage. Set VDDQ (T210B01). 550-650.         |
 | uart_port=0            | Enables logging on serial port for L4T uboot/kernel.       |
 | Additional keys        | Each distro supports more keys. Check README_CONFIG.txt  for more info. |
 | ---------------------- | ---------------------------------------------------------- |
+| bootwait=3             | Overrides global bootwait from `[config]`.                 |
 | id=IDNAME              | Identifies boot entry for forced boot via id. Max 7 chars. |
 | logopath={FILE path}   | If it exists, it will load the specified bitmap. Otherwise `bootloader/bootlogo.bmp` will be used if exists |
 | icon={FILE path}       | Force Nyx to use the icon defined here. If this is not found, it will check for a bmp named as the boot entry ([Test 2] -> `bootloader/res/Test 2.bmp`). Otherwise defaults will be used. |
@@ -185,20 +188,26 @@ hekate has a boot storage in the binary that helps it configure it outside of BP
 
 ```
 hekate  (c) 2018,      naehrwert, st4rk.
-        (c) 2018-2023, CTCaer.
+        (c) 2018-2024, CTCaer.
 
-Nyx GUI (c) 2019-2023, CTCaer.
+Nyx GUI (c) 2019-2024, CTCaer.
 
 Thanks to: derrek, nedwill, plutoo, shuffle2, smea, thexyz, yellows8.
 Greetings to: fincs, hexkyz, SciresM, Shiny Quagsire, WinterMute.
 
 Open source and free packages used:
- - FatFs R0.13a, Copyright (c) 2017, ChaN
- - bcl-1.2.0, Copyright (c) 2003-2006, Marcus Geelnard
- - Atmosphère (Exosphere types/panic, prc id kernel patches),
-   Copyright (c) 2018-2019, Atmosphère-NX
- - elfload, Copyright (c) 2014 Owen Shepherd, Copyright (c) 2018 M4xw
- - Littlev Graphics Library, Copyright (c) 2016 Gabor Kiss-Vamosi
+ - Littlev Graphics Library,
+   Copyright (c) 2016-2018 Gabor Kiss-Vamosi
+ - FatFs R0.13c,
+   Copyright (c) 2006-2018, ChaN
+   Copyright (c) 2018-2022, CTCaer
+ - bcl-1.2.0,
+   Copyright (c) 2003-2006, Marcus Geelnard
+ - blz,
+   Copyright (c) 2018, SciresM
+ - elfload,
+   Copyright (c) 2014 Owen Shepherd,
+   Copyright (c) 2018 M4xw
 
                          ___
                       .-'   `'.
