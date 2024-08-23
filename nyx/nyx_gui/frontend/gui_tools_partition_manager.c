@@ -1509,8 +1509,11 @@ static lv_res_t _create_mbox_start_partitioning(lv_obj_t *btn)
 	// Do full or hekate/Nyx backup.
 	if (_backup_and_restore_files(true, lbl_paths))
 	{
-		lv_label_set_text(lbl_status, "#FFDD00 エラー：#ファイルのバックアップに失敗しました。");
-		goto error;
+		if (part_info.backup_possible)
+			lv_label_set_text(lbl_status, "#FFDD00 Error:# Failed to back up files!");
+		else
+			lv_label_set_text(lbl_status, "#FFDD00 Error:# Failed to back up files!\nBootloader folder exceeds 1GB or corrupt!");
+
 	}
 
 	f_mount(NULL, "sd:", 1); // Unmount SD card.

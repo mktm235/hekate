@@ -1297,7 +1297,7 @@ static void _create_tab_about(lv_theme_t * th, lv_obj_t * parent)
 	lv_obj_align(ctcaer_img, lbl_octopus, LV_ALIGN_OUT_BOTTOM_MID, 0, LV_DPI * 2 / 3);
 
 	char version[32];
-	s_printf(version, "Nyx v%d.%d.%d", NYX_VER_MJ, NYX_VER_MN, NYX_VER_HF);
+	s_printf(version, "Nyx %s%d.%d.%d%c", NYX_VER_RL ? "v" : "", NYX_VER_MJ, NYX_VER_MN, NYX_VER_HF, NYX_VER_RL > 'A' ? NYX_VER_RL : 0);
 	lv_obj_t * lbl_ver = lv_label_create(parent, NULL);
 	lv_obj_align(lbl_ver, mktm_img, LV_ALIGN_OUT_BOTTOM_RIGHT, -LV_DPI / 20, LV_DPI / 4);
 	lv_label_set_style(lbl_ver, &monospace_text);
@@ -2333,7 +2333,9 @@ static void _nyx_main_menu(lv_theme_t * th)
 
 	// Add all tabs content.
 	char version[32];
-	s_printf(version, "hekate v%d.%d.%d", nyx_str->version & 0xFF, (nyx_str->version >> 8) & 0xFF, (nyx_str->version >> 16) & 0xFF);
+	char rel = (nyx_str->version >> 24) & 0xFF;
+	s_printf(version, "hekate %s%d.%d.%d%c",
+			 rel ? "v" : "", nyx_str->version & 0xFF, (nyx_str->version >> 8) & 0xFF, (nyx_str->version >> 16) & 0xFF, rel > 'A' ? rel : 0);
 	lv_obj_t *tab_about = lv_tabview_add_tab(tv, version);
 
 	lv_obj_t *tab_home = lv_tabview_add_tab(tv, SYMBOL_HOME" ホーム");
