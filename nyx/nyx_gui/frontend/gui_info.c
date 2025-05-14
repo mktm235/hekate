@@ -2298,12 +2298,12 @@ static lv_res_t _create_window_sdcard_info_status(lv_obj_t *btn)
 		"読み書き失敗：\n"
 		"読み書きエラー："
 	);
-	lv_obj_set_size(desc4, LV_HOR_RES / 2 / 11 * 2, LV_VER_RES - (LV_DPI * 11 / 8) * 4);
+	lv_obj_set_size(desc4, LV_HOR_RES / 2 / 5 * 2, LV_VER_RES - (LV_DPI * 11 / 8) * 4);
 	lv_obj_set_width(lb_desc4, lv_obj_get_width(desc4));
-	lv_obj_align(desc4, val3, LV_ALIGN_OUT_RIGHT_MID, LV_DPI / 5 * 3, 0);
+	lv_obj_align(desc4, val3, LV_ALIGN_OUT_RIGHT_MID, LV_DPI / 2, 0);
 
 	lv_obj_t *val4 = lv_cont_create(win, NULL);
-	lv_obj_set_size(val4, LV_HOR_RES / 4, LV_VER_RES - (LV_DPI * 11 / 8) * 4);
+	lv_obj_set_size(val4, LV_HOR_RES / 13 * 3, LV_VER_RES - (LV_DPI * 11 / 8) * 4);
 
 	lv_obj_t * lb_val4 = lv_label_create(val4, lb_desc);
 
@@ -2323,12 +2323,11 @@ static lv_res_t _create_window_sdcard_info_status(lv_obj_t *btn)
 	f_getfree("", &sd_fs.free_clst, NULL);
 
 	lv_label_set_text(lb_desc3,
-		"#00DDFF 見つかったFATファイルシステム：#\n"
+		"#00DDFF 見つかったFAT FS:#\n"
 		"ファイルシステム：\n"
-		"クラスタ：\n"
-		"空き容量 / 合計："
+		"クラスタサイズ：\n"
+		"空き容量/合計："
 	);
-
 	lv_obj_set_width(lb_desc3, lv_obj_get_width(desc3));
 
 	s_printf(txt_buf, "\n%s\n%d %s\n%d/%d MiB",
