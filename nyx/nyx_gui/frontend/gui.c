@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024 CTCaer
+ * Copyright (c) 2018-2025 CTCaer
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -38,7 +38,7 @@ extern volatile nyx_storage_t *nyx_str;
 extern lv_res_t launch_payload(lv_obj_t *list);
 
 static bool disp_init_done = false;
-static bool do_reload = false;
+static bool do_auto_reload = false;
 
 lv_style_t hint_small_style;
 lv_style_t hint_small_style_white;
@@ -201,8 +201,8 @@ static void _save_fb_to_bmp()
 	if (get_tmr_ms() < timer)
 		return;
 
-	if (do_reload)
-		return;
+	if (do_auto_reload)
+		goto exit;
 
 	// Invalidate data.
 	bpmp_mmu_maintenance(BPMP_MMU_MAINT_INVALID_WAY, false);
@@ -304,7 +304,7 @@ static void _save_fb_to_bmp()
 		lv_mbox_set_text(mbox, SYMBOL_WARNING"  #FFDD00 スクショの保存に失敗しました#");
 	manual_system_maintenance(true);
 	lv_mbox_start_auto_close(mbox, 4000);
-
+exit:
 	// Set timer to 2s.
 	timer = get_tmr_ms() + 2000;
 }
@@ -815,7 +815,7 @@ bool nyx_emmc_check_battery_enough()
 	return true;
 }
 
-static void _nyx_sd_card_issues(void *param)
+static void _nyx_sd_card_issues_warning(void *param)
 {
 	lv_obj_t *dark_bg = lv_obj_create(lv_scr_act(), NULL);
 	lv_obj_set_style(dark_bg, &mbox_darken);
@@ -826,7 +826,7 @@ static void _nyx_sd_card_issues(void *param)
 	lv_mbox_set_recolor_text(mbox, true);
 
 	lv_mbox_set_text(mbox,
-		"#FF8000 SDカードの問題チェック#\n\n"
+		"#FF8000 SDカードの問題警告#\n\n"
 		"#FFDD00 SDカードは1ビットモードで初期化されています。#\n"
 		"#FFDD00 これは、コネクタが外れているか破損している可能性があります。#\n\n"
 		"確認することをお勧めします。\n#C7EA46 本体情報# -> #C7EA46 SDカード#");
@@ -866,7 +866,7 @@ void nyx_window_toggle_buttons(lv_obj_t *win, bool disable)
 	}
 }
 
-lv_res_t lv_win_close_action_custom(lv_obj_t * btn)
+lv_res_t nyx_win_close_action_custom(lv_obj_t * btn)
 {
 	close_btn = NULL;
 
@@ -886,7 +886,7 @@ lv_obj_t *nyx_create_standard_window(const char *win_title)
 	lv_win_set_style(win, LV_WIN_STYLE_BG, &win_bg_style);
 	lv_obj_set_size(win, LV_HOR_RES, LV_VER_RES);
 
-	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" 閉じる", lv_win_close_action_custom);
+	close_btn = lv_win_add_btn(win, NULL, SYMBOL_CLOSE" Close", nyx_win_close_action_custom);
 
 	return win;
 }
@@ -928,8 +928,27 @@ static void _launch_hos(u8 autoboot, u8 autoboot_list)
 	(*main_ptr)();
 }
 
-void reload_nyx()
+void reload_nyx(lv_obj_t *obj, bool force)
 {
+	if (!force)
+	{
+		sd_mount();
+
+		// Check that Nyx still exists.
+		if (f_stat("bootloader/sys/nyx.bin", NULL))
+		{
+			sd_unmount();
+
+			// Remove lvgl object in case of being invoked from a window.
+			if (obj)
+				lv_obj_del(obj);
+
+			do_auto_reload = false;
+
+			return;
+		}
+	}
+
 	b_cfg->boot_cfg = BOOT_CFG_AUTOBOOT_EN;
 	b_cfg->autoboot = 0;
 	b_cfg->autoboot_list = 0;
@@ -947,7 +966,7 @@ void reload_nyx()
 static lv_res_t reload_action(lv_obj_t *btns, const char *txt)
 {
 	if (!lv_btnm_get_pressed(btns))
-		reload_nyx();
+		reload_nyx(NULL, false);
 
 	return mbox_action(btns, txt);
 }
@@ -969,7 +988,7 @@ static lv_res_t _removed_sd_action(lv_obj_t *btns, const char *txt)
 		break;
 	case 2:
 		sd_end();
-		do_reload = false;
+		do_auto_reload = false;
 		break;
 	}
 
@@ -981,9 +1000,10 @@ static void _check_sd_card_removed(void *params)
 	// The following checks if SDMMC_1 is initialized.
 	// If yes and card was removed, shows a message box,
 	// that will reload Nyx, when the card is inserted again.
-	if (!do_reload && sd_get_card_removed())
+	static lv_obj_t *dark_bg = NULL;
+	if (!do_auto_reload && sd_get_card_removed())
 	{
-		lv_obj_t *dark_bg = lv_obj_create(lv_scr_act(), NULL);
+		dark_bg = lv_obj_create(lv_scr_act(), NULL);
 		lv_obj_set_style(dark_bg, &mbox_darken);
 		lv_obj_set_size(dark_bg, LV_HOR_RES, LV_VER_RES);
 
@@ -999,16 +1019,16 @@ static void _check_sd_card_removed(void *params)
 		lv_obj_align(mbox, NULL, LV_ALIGN_CENTER, 0, 0);
 		lv_obj_set_top(mbox, true);
 
-		do_reload = true;
+		do_auto_reload = true;
 	}
 
 	// If in reload state and card was inserted, reload nyx.
-	if (do_reload && !sd_get_card_removed())
-		reload_nyx();
+	if (do_auto_reload && !sd_get_card_removed())
+		reload_nyx(dark_bg, false);
 }
 
 lv_task_t *task_emmc_errors;
-static void _nyx_emmc_issues(void *params)
+static void _nyx_emmc_issues_warning(void *params)
 {
 	if (emmc_get_mode() < EMMC_MMC_HS400)
 	{
@@ -1024,7 +1044,7 @@ static void _nyx_emmc_issues(void *params)
 		lv_mbox_set_recolor_text(mbox, true);
 
 		lv_mbox_set_text(mbox,
-			"#FF8000 eMMC問題チェック#\n\n"
+			"#FF8000 eMMC問題警告#\n\n"
 			"#FFDD00 eMMCは低速モードで初期化されています。#\n"
 			"#FFDD00 これはハードウェアの問題をである可能性があります。#\n\n"
 			"確認することをお勧めします。\n#C7EA46 本体情報# -> #C7EA46 eMMC#");
@@ -1232,9 +1252,9 @@ static void _create_tab_about(lv_theme_t * th, lv_obj_t * parent)
 	lv_label_set_recolor(lbl_credits, true);
 	lv_label_set_static_text(lbl_credits,
 		"#C7EA46 hekate# (c) 2018,      #C7EA46 naehrwert#, #C7EA46 st4rk#\n"
-		"       (c) 2018-2024, #C7EA46 CTCaer#\n"
+		"       (c) 2018-2025, #C7EA46 CTCaer#\n"
 		"\n"
-		"#C7EA46 Nyx#    (c) 2019-2024, #C7EA46 CTCaer#\n"
+		"#C7EA46 Nyx#    (c) 2019-2025, #C7EA46 CTCaer#\n"
 		"\n"
 		"Thanks to: #00CCFF derrek, nedwill, plutoo, #\n"
 		"           #00CCFF shuffle2, smea, thexyz, yellows8 #\n"
@@ -2084,6 +2104,7 @@ static void _create_status_bar(lv_theme_t * th)
 {
 	static lv_obj_t *status_bar_bg;
 	status_bar_bg = lv_cont_create(lv_layer_top(), NULL);
+	status_bar.bar_bg = status_bar_bg;
 
 	static lv_style_t status_bar_style;
 	lv_style_copy(&status_bar_style, &lv_style_plain_color);
@@ -2136,9 +2157,9 @@ static void _create_status_bar(lv_theme_t * th)
 	lv_obj_set_size(btn_mid, LV_DPI * 5 / 2, LV_DPI / 2);
 	lv_obj_align(btn_mid, NULL, LV_ALIGN_CENTER, 0, 0);
 	status_bar.mid = btn_mid;
-	lv_obj_set_opa_scale(status_bar.mid, LV_OPA_0);
-	lv_obj_set_opa_scale_enable(status_bar.mid, true);
-	lv_obj_set_click(status_bar.mid, false);
+	lv_obj_set_opa_scale(btn_mid, LV_OPA_0);
+	lv_obj_set_opa_scale_enable(btn_mid, true);
+	lv_obj_set_click(btn_mid, false);
 	lv_btn_set_action(btn_mid, LV_BTN_ACTION_CLICK, _save_options_action);
 }
 
@@ -2370,7 +2391,7 @@ static void _nyx_main_menu(lv_theme_t * th)
 
 	lv_task_create(_check_sd_card_removed, 2000, LV_TASK_PRIO_LOWEST, NULL);
 
-	task_emmc_errors = lv_task_create(_nyx_emmc_issues, 2000, LV_TASK_PRIO_LOWEST, NULL);
+	task_emmc_errors = lv_task_create(_nyx_emmc_issues_warning, 2000, LV_TASK_PRIO_LOWEST, NULL);
 	lv_task_ready(task_emmc_errors);
 
 	// Create top level global line separators.
@@ -2470,7 +2491,7 @@ void nyx_load_and_run()
 	// Check if sd card issues.
 	if (sd_get_mode() == SD_1BIT_HS25)
 	{
-		lv_task_t *task_run_sd_errors = lv_task_create(_nyx_sd_card_issues, LV_TASK_ONESHOT, LV_TASK_PRIO_LOWEST, NULL);
+		lv_task_t *task_run_sd_errors = lv_task_create(_nyx_sd_card_issues_warning, LV_TASK_ONESHOT, LV_TASK_PRIO_LOWEST, NULL);
 		lv_task_once(task_run_sd_errors);
 	}
 
